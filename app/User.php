@@ -79,7 +79,7 @@ class User extends Authenticatable
         ]);
     }
 
-    public static function isUserAdmin( $userId)
+    public static function isUserAdmin($userId)
     {
         $userType = User::find($userId)->type;
 
@@ -87,6 +87,12 @@ class User extends Authenticatable
             return true;
         else
             return false;
+    }
+
+    //Relationships
+    public function contacts()
+    {
+        return $this->hasMany('App\Contact');
     }
 
 }

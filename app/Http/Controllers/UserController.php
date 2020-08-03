@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -17,6 +18,13 @@ class UserController extends Controller
         }
 
 //        dd(User::isExist($username, $password));
+    }
+
+    function logout()
+    {
+        session(['isLogin' => false]);
+//        return dd(session('isLogin'));
+        return redirect()->route('user.login.form');
     }
 
     function register()

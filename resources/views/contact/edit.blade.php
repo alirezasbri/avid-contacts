@@ -15,7 +15,7 @@
     {{--    <!-- Optional theme -->--}}
     {{--    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}">--}}
 </head>
-<body>
+<body style="margin: 30px">
 <h1>Contact Edit Form</h1>
 {{--<form action="{{ route('contact.edit',$idContact) }}" method="post">--}}
 {{--    {!! csrf_field() !!}--}}
@@ -28,6 +28,17 @@
     <label for="family">Family</label>
     <input type="text" name="family" class="form-control" id="family" placeholder="Family"
            value="{{$contact->family}}">
+</div>
+
+<div class="form-check">
+    @if($contact->type == 'shared')
+        <input id="checkbox" class="form-check-input" type="checkbox" value="" checked>
+    @else
+        <input id="checkbox" class="form-check-input" type="checkbox" value="">
+    @endif
+    <label class="form-check-label" for="checkbox">
+        به اشتراک گذاشتن
+    </label>
 </div>
 
 <button onclick="savePhonesAndEmails()" class="btn btn-primary">Submit</button>
@@ -121,22 +132,41 @@
         });
     }
 
+
     function addPhone() {
-        let para = document.createElement("input");
-        para.setAttribute("name", "phones[]");
-        para.setAttribute("value", document.getElementById("phone").value);
-        para.innerHTML = document.getElementById("phone").value;
-        document.getElementById("phone").value = "";
-        document.getElementById("divPhone").appendChild(para);
+
+        let phoneNumber = document.getElementById("phone").value;
+        let filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        if (filter.test(phoneNumber)) {
+            let para = document.createElement("input");
+            para.setAttribute("name", "phones[]");
+            para.setAttribute("value", document.getElementById("phone").value);
+            para.innerHTML = document.getElementById("phone").value;
+            document.getElementById("phone").value = "";
+            document.getElementById("divPhone").appendChild(para);
+        } else {
+            alert('phone number is invalid!');
+        }
+
+
     }
 
     function addEmail() {
-        let para = document.createElement("input");
-        para.setAttribute("name", "emails[]");
-        para.setAttribute("value", document.getElementById("email").value);
-        para.innerHTML = document.getElementById("email").value;
-        document.getElementById("email").value = "";
-        document.getElementById("divEmail").appendChild(para);
+
+        let email = document.getElementById("email").value;
+        let filter = /^\S+@\S+\.\S+$/;
+        if (filter.test(email)) {
+            let para = document.createElement("input");
+            para.setAttribute("name", "emails[]");
+            para.setAttribute("value", document.getElementById("email").value);
+            para.innerHTML = document.getElementById("email").value;
+            document.getElementById("email").value = "";
+            document.getElementById("divEmail").appendChild(para);
+        } else {
+            alert('email is invalid!');
+        }
+
+
     }
 
     function savePhonesAndEmails() {
@@ -155,12 +185,14 @@
 
         let name = document.getElementById("name").value;
         let family = document.getElementById("family").value;
+        let checkBox = document.querySelector("#checkbox").checked;
 
         let json = {
             name: name,
             family: family,
             phones: phones,
-            emails: emails
+            emails: emails,
+            checkBox: checkBox
         };
 
 

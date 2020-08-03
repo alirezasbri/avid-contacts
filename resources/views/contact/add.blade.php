@@ -11,7 +11,7 @@
     @include('layouts.bootstrap')
 
 </head>
-<body>
+<body style="margin: 30px">
 <h1>Contact Add Form</h1>
 {{--<form action="{{ route('contact.add',$userId) }}" method="post">--}}
 {{--{!! csrf_field() !!}--}}
@@ -23,8 +23,14 @@
     <label for="family">Family</label>
     <input type="text" name="family" class="form-control" id="family" placeholder="Family">
 </div>
+<div class="form-check">
+    <input id="checkbox" class="form-check-input" type="checkbox" value="">
+    <label class="form-check-label" for="defaultCheck1">
+        به اشتراک گذاشتن
+    </label>
+</div>
 
-<button onclick="savePhonesAndEmails()" class="btn btn-primary">ثبت نهایی</button>
+<button style="margin-top: 5px " onclick="savePhonesAndEmails()" class="btn btn-primary">ثبت نهایی</button>
 
 {{--</form>--}}
 <hr>
@@ -33,13 +39,13 @@
 <div class="form-group">
     <label for="phone">Phone Number</label>
     <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
-    <button id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
+    <button style="margin-top: 5px " id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
 </div>
 <div id="divPhone"></div>
 <div class="form-group">
     <label for="email">Email Address</label>
     <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
-    <button id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
+    <button style="margin-top: 5px " id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
 </div>
 <div id="divEmail"></div>
 
@@ -49,21 +55,39 @@
     e.preventDefault();
 
     function addPhone() {
-        let para = document.createElement("input");
-        para.setAttribute("name", "phones[]");
-        para.setAttribute("value", document.getElementById("phone").value);
-        para.innerHTML = document.getElementById("phone").value;
-        document.getElementById("phone").value = "";
-        document.getElementById("divPhone").appendChild(para);
+
+        let phoneNumber = document.getElementById("phone").value;
+        let filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        if (filter.test(phoneNumber)) {
+            let para = document.createElement("input");
+            para.setAttribute("name", "phones[]");
+            para.setAttribute("value", document.getElementById("phone").value);
+            para.innerHTML = document.getElementById("phone").value;
+            document.getElementById("phone").value = "";
+            document.getElementById("divPhone").appendChild(para);
+        } else {
+            alert('phone number is invalid!');
+        }
+
+
     }
 
     function addEmail() {
-        let para = document.createElement("input");
-        para.setAttribute("name", "emails[]");
-        para.setAttribute("value", document.getElementById("email").value);
-        para.innerHTML = document.getElementById("email").value;
-        document.getElementById("email").value = "";
-        document.getElementById("divEmail").appendChild(para);
+
+        let email = document.getElementById("email").value;
+        let filter = /^\S+@\S+\.\S+$/;
+        if (filter.test(email)) {
+            let para = document.createElement("input");
+            para.setAttribute("name", "emails[]");
+            para.setAttribute("value", document.getElementById("email").value);
+            para.innerHTML = document.getElementById("email").value;
+            document.getElementById("email").value = "";
+            document.getElementById("divEmail").appendChild(para);
+        } else {
+            alert('email is invalid!');
+        }
+
+
     }
 
     function savePhonesAndEmails() {
@@ -79,12 +103,16 @@
 
         let name = document.getElementById("name").value;
         let family = document.getElementById("family").value;
+        let checkBox = document.querySelector("#checkbox").checked;
+
+        alert(checkBox);
 
         let json = {
             name: name,
             family: family,
             phones: phones,
-            emails: emails
+            emails: emails,
+            checkBox: checkBox
             // _token: $('meta[name="csrf-token"]').attr('content')
         };
 
@@ -111,7 +139,7 @@
                 window.location.href = data.url;
             },
             error: function (data) {
-                alert(data)
+                alert('error')
             }
 
         });

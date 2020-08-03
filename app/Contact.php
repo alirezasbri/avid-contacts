@@ -15,9 +15,9 @@ class Contact extends Model
         return $query->where('id', $id)->first();
     }
 
-    public static function insertContact($userId, $name, $family)
+    public static function insertContact($userId, $name, $family, $type)
     {
-        $type = 'private';
+//        $type = 'private';
         if (User::isUserAdmin($userId))
             $type = 'public';
 
@@ -28,5 +28,28 @@ class Contact extends Model
             'type' => $type
         ])->id;
 
+    }
+
+    public static function isContactEditable($userId, $contactUserId)
+    {
+        if ($userId == $contactUserId)
+            return true;
+        else false;
+    }
+
+    //Relationships
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function emails()
+    {
+        return $this->hasMany('App\Email');
+    }
+
+    public function phoneNumbers()
+    {
+        return $this->hasMany('App\PhoneNumber');
     }
 }

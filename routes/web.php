@@ -27,6 +27,9 @@ Route::name('user.login.form')->get('/login', function () {
 Route::name('user.register.form')->get('/register', function () {
     return view('user.register');
 });
+Route::name('user.logout')->get('/logout', 'UserController@logout');
+
+
 Route::name('user.login')->post('/login', 'UserController@login');
 Route::name('user.register')->post('/register', 'UserController@register');
 
@@ -39,26 +42,7 @@ Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@up
 Route::name('contact.add.form')->get('/user/{userId}/add', function ($userId) {
     return view('contact.add', ['userId' => $userId]);
 });
-Route::name('contact.edit.form')->get('/contact/edit/{idContact}', function ($idContact) {
-    $phoneNumbers = PhoneNumber::getPhoneNumbers($idContact);
-    $emails = Email::getContactEmails($idContact);
-    $contact = Contact::getContactByID($idContact);
-
-//    $numbersStr = "";
-//    foreach ($phoneNumbers as $phoneNumber) {
-//        $numbersStr .= $phoneNumber->phone_number . ',';
-//    }
-//
-//    $emailsStr = "";
-//    foreach ($emails as $email) {
-//        $emailsStr .= $email->email_address . ',';
-//    }
-
-    return view('contact.edit', ['idContact' => $idContact,
-        'contact' => $contact,
-        'phoneNumbers' => $phoneNumbers,
-        'emails' => $emails]);
-});
+Route::name('contact.edit.form')->get('/contact/edit/{idContact}', 'ContactController@editFormContact');
 
 Route::name('contact.delete')->get('/user/{id}/contact/delete/{idContact}', 'ContactController@deleteContact');
 

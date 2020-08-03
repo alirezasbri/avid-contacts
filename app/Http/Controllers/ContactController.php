@@ -12,7 +12,7 @@ class ContactController extends Controller
     {
         if (session('isLogin', false)) {
             $contacts = \App\Contact::where('user_id', $id)->get();
-            $publicContacts = Contact::where('type', 'public')->get();
+            $publicContacts = Contact::where('type', 'public')->orWhere('type', 'shared')->get();
             return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => $id]);
         } else return redirect()->route('user.login.form');
 
@@ -30,13 +30,19 @@ class ContactController extends Controller
         $phoneNumbers = PhoneNumber::getPhoneNumbers($idContact);
         $emails = Email::getContactEmails($idContact);
         $contact = Contact::getContactByID($idContact);
-        return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact]);
+        $editable = Contact::isContactEditable($id, $contact->user_id);
+//        return dd($editable, $id, $contact);
+        return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
     }
 
 
     function addContact($id)
     {
-        $contactId = Contact::insertContact($id, \request('name'), \request('family'));
+
+        if (request('checkBox'))
+            $type = "shared";
+        else $type = "private";
+        $contactId = Contact::insertContact($id, \request('name'), \request('family'), $type);
 
         $phones = array_values(request('phones'));
         $emails = array_values(request('emails'));
@@ -62,6 +68,20 @@ class ContactController extends Controller
 //        ]); // delete , destroy (multi delete)
 //    }
 
+    function editFormContact($idContact)
+    {
+        $phoneNumbers = PhoneNumber::getPhoneNumbers($idContact);
+        $emails = Email::getContactEmails($idContact);
+        $contact = Contact::getContactByID($idContact);
+
+//
+
+        return view('contact.edit', ['idContact' => $idContact,
+            'contact' => $contact,
+            'phoneNumbers' => $phoneNumbers,
+            'emails' => $emails]);
+    }
+
     function editContact($id)
     {
 
@@ -69,9 +89,14 @@ class ContactController extends Controller
         $emails = Email::getContactEmails($id);
         $contact = Contact::getContactByID($id);
 
+        if (request('checkBox'))
+            $type = "shared";
+        else $type = "private";
+
         $contact->update([
             'name' => request('name'),
-            'family' => request('family')
+            'family' => request('family'),
+            'type' => $type
 
         ]);
 

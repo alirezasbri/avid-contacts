@@ -13,6 +13,10 @@
 <a href="{{route('contact.add.form',$userId)}}">
     <button class="btn btn-danger" style="margin: 5px">اضافه کردن مخاطب</button>
 </a>
+<a href="{{route('user.logout')}}">
+    <button class="btn btn-light" style="margin: 5px">خروج</button>
+</a>
+
 <hr>
 <h2 align="right">خصوصی</h2><br>
 <div align="right">
@@ -41,7 +45,7 @@
         @foreach($publicContacts as $pContact)
             <tr>
                 <td><a
-                        href={{route('contact.details',['id'=>$pContact->user_id,'idContact'=>$pContact->id])}}>{{$pContact->name . ' ' .$pContact->family}}</a>
+                        href={{route('contact.details',['id'=>$userId,'idContact'=>$pContact->id])}}>{{$pContact->name . ' ' .$pContact->family}}</a>
                 </td>
 
                 {{--                <td><a href="{{route('contact.delete',$contact->id)}}">حذف</a>--}}

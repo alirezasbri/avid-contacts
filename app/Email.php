@@ -23,4 +23,10 @@ class Email extends Model
         ]);
     }
 
+    //Relationships
+    public function contact()
+    {
+        return $this->belongsTo('App\Contact');
+    }
+
 }
