@@ -52,4 +52,8 @@ class Contact extends Model
     {
         return $this->hasMany('App\PhoneNumber');
     }
+
+    public function image(){
+        return $this->hasOne('App\Image');
+    }
 }

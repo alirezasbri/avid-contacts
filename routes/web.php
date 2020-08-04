@@ -53,3 +53,7 @@ Route::name('email.delete')->get('/email/delete/{idEmail}', 'EmailController@del
 Route::name('contact.add')->post('/user/{id}/contact/add', 'ContactController@addContact');
 Route::name('contact.edit')->post('/contact/edit/{id}', 'ContactController@editContact');
 Route::name('phoneNumber.add')->post('/contact/phonenumber/add/{id}', 'PhoneNumberController@addPhoneNumber');
+
+//Image Routes
+Route::name('image.show')->get('/image', 'ImageController@index');
+Route::name('image.save')->post('/save', 'ImageController@save');

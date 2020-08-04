@@ -16,7 +16,7 @@
     {{--    <!-- Optional theme -->--}}
     {{--    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}">--}}
 </head>
-<body>
+<body style="margin: 20px">
 <h1>Register Form</h1>
 
 @include('layouts.errors')

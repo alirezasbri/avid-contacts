@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -9,9 +9,14 @@
     <title>Add Contact</title>
 
     @include('layouts.bootstrap')
+    <style>
+        .avatar-pic {
+            width: 300px;
+        }
+    </style>
 
 </head>
-<body style="margin: 30px">
+<body style="margin: 30px" class="col-md-5">
 <h1>Contact Add Form</h1>
 {{--<form action="{{ route('contact.add',$userId) }}" method="post">--}}
 {{--{!! csrf_field() !!}--}}
@@ -49,10 +54,38 @@
 </div>
 <div id="divEmail"></div>
 
+<h3>اضافه کردن عکس پروفایل</h3>
+<br>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
+            <div class="file-field">
+                <div class="row">
+                    <div class=" col-md-8 mb-4">
+                        <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="btn btn-mdb-color btn-rounded float-left">
+                                <input type="file" name="photo_name" id="photo_name" required=""> <br>
+                                <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
+                                    ثبت عکس
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-4 mb-4">
+                        <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 </body>
 
 <script type="text/javascript">
-    e.preventDefault();
+    // e.preventDefault();
 
     function addPhone() {
 
@@ -103,16 +136,18 @@
 
         let name = document.getElementById("name").value;
         let family = document.getElementById("family").value;
+        let imageName = document.getElementById("original").alt;
         let checkBox = document.querySelector("#checkbox").checked;
 
-        alert(checkBox);
+        // alert(imageName);
 
         let json = {
             name: name,
             family: family,
             phones: phones,
             emails: emails,
-            checkBox: checkBox
+            checkBox: checkBox,
+            image: imageName
             // _token: $('meta[name="csrf-token"]').attr('content')
         };
 
@@ -137,6 +172,7 @@
             // contentType: 'application/json',
             success: function (data) {
                 window.location.href = data.url;
+                // alert(data.url.toString())
             },
             error: function (data) {
                 alert('error')
@@ -145,5 +181,43 @@
         });
 
     }
+
+    //Upload Image Ajax
+    $(document).ready(function (e) {
+
+        $('#imageUploadForm').on('submit', (function (e) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('image.save')}}",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $('#original').attr('src', '/public/image/' + data.photo_name);
+                    $('#original').attr('alt', data.photo_name);
+                    // $('#thumbImg').attr('src', 'public/thumbnail/' + data.photo_name);
+                },
+
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+
+
+        }));
+
+    });
 
 </script>

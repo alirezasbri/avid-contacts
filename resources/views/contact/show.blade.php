@@ -1,5 +1,7 @@
 @include('layouts.bootstrap')
 
+
+<body style="margin: 20px">
 <h1>{{$contact->name . ' ' . $contact->family}}</h1>
 
 <h2>PhoneNumbers</h2>
@@ -20,3 +22,4 @@
     </a>
 @endif
 {{--<h1> {{ $contact->phone_number . ' ' . $contact->family }}</h1>--}}
+</body>

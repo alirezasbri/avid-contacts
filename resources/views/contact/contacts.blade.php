@@ -8,6 +8,13 @@
 @include('layouts.bootstrap')
 <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+
+    <style>
+        .avatar-pic {
+            width: 75px;
+        }
+    </style>
+
 </head>
 <body>
 <a href="{{route('contact.add.form',$userId)}}">
@@ -22,12 +29,20 @@
 <div align="right">
     <table class="table table-striped">
         <tr>
+            {{--            <th>عکس</th>--}}
             <th>مخاطب</th>
             <th>عملیات</th>
+
         </tr>
         @foreach($contacts as $contact)
             <tr>
-                <td><a
+                {{--                <td>--}}
+                {{--                    <img id="profileImage" src="" class=" z-depth-1-half avatar-pic" alt="">--}}
+                {{--                </td>--}}
+                <td>
+{{--                    <img id="profileImage" src="{{'/public/image/'.$image->image}}" class=" z-depth-1-half avatar-pic"--}}
+{{--                         alt="">--}}
+                    <a
                         href={{route('contact.details',['id'=>$contact->user_id,'idContact'=>$contact->id])}}>{{$contact->name . ' ' .$contact->family}}</a>
                 </td>
 

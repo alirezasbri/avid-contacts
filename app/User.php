@@ -42,8 +42,8 @@ class User extends Authenticatable
     public static function isExistUser($username, $password)
     {
 
-        if (User::where('user_name', $username)->exists()) {
-            if (User::where('user_name', $username)->first()->password == $password)
+        if (User::where('username', $username)->exists()) {
+            if (User::where('username', $username)->first()->password == $password)
                 return true;
         } else {
             return false;
@@ -54,24 +54,24 @@ class User extends Authenticatable
 
     public function scopeIsExist($query, $username, $password)
     {
-        return $query->where('user_name', $username)->
+        return $query->where('username', $username)->
         where('password', $password)->exists();
     }
 
     public function scopeGetUserID($query, $username)
     {
-        return $query->where('user_name', $username)->first();
+        return $query->where('username', $username)->first();
     }
 
     public function scopeIsUsernameExist($query, $username)
     {
-        return $query->where('user_name', $username)->exists();
+        return $query->where('username', $username)->exists();
     }
 
     public static function createUser($userName, $password, $name, $family)
     {
         User::create([
-            'user_name' => $userName,
+            'username' => $userName,
             'password' => $password,
             'name' => $name,
             'family' => $family,

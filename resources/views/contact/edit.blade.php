@@ -15,7 +15,7 @@
     {{--    <!-- Optional theme -->--}}
     {{--    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}">--}}
 </head>
-<body style="margin: 30px">
+<body style="margin: 30px" class="col-md-5">
 <h1>Contact Edit Form</h1>
 {{--<form action="{{ route('contact.edit',$idContact) }}" method="post">--}}
 {{--    {!! csrf_field() !!}--}}

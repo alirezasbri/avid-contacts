@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use App\Email;
+use App\Image;
 use App\PhoneNumber;
 
 class ContactController extends Controller
@@ -39,7 +40,7 @@ class ContactController extends Controller
     function addContact($id)
     {
 
-        if (request('checkBox'))
+        if (\request('checkBox') == 'true')
             $type = "shared";
         else $type = "private";
         $contactId = Contact::insertContact($id, \request('name'), \request('family'), $type);
@@ -55,6 +56,13 @@ class ContactController extends Controller
         foreach ($emails as $email) {
             Email::insertEmail($contactId, $email);
         }
+
+
+        $image = new Image(['image' => \request('image')]);
+
+        $contact = Contact::find($contactId);
+
+        $contact->image()->save($image);
 
         $result = ["url" => route('contact.index', $id)];
         return $result;
