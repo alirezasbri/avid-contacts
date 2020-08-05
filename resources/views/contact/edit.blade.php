@@ -14,6 +14,12 @@
 
     {{--    <!-- Optional theme -->--}}
     {{--    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}">--}}
+
+    <style>
+        .avatar-pic {
+            width: 300px;
+        }
+    </style>
 </head>
 <body style="margin: 30px" class="col-md-5">
 <h1>Contact Edit Form</h1>
@@ -84,7 +90,6 @@
     @endforeach
 </table>
 
-
 <table class="table table-striped">
     @foreach($emails as $email)
         <tr>
@@ -97,6 +102,45 @@
         </tr>
     @endforeach
 </table>
+
+<h3>عکس پروفایل</h3>
+<br>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
+            <div class="file-field">
+                <div class="row">
+                    <div class=" col-md-8 mb-4">
+                        @php
+                            $value = isset($contact->image) ? $contact->image->image : null;
+                        @endphp
+                        @isset($value)
+
+                            <img id="original" src="{{'/public/image/'. $value  }}" class="z-depth-1-half avatar-pic"
+                                 alt="">
+                            <button id="delImage" onclick="deleteImage()">حذف</button>
+
+                        @else
+                            <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
+                        @endif
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="btn btn-mdb-color btn-rounded float-left">
+                                <input type="file" name="photo_name" id="photo_name" required=""> <br>
+                                <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
+                                    ثبت عکس
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-4 mb-4">
+                        <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script type="text/javascript">
 
@@ -132,6 +176,10 @@
         });
     }
 
+    function deleteImage() {
+        document.getElementById("original").src = "";
+        document.getElementById("delImage").style.display = "none";
+    }
 
     function addPhone() {
 
@@ -185,6 +233,7 @@
 
         let name = document.getElementById("name").value;
         let family = document.getElementById("family").value;
+        let imageName = document.getElementById("original").alt;
         let checkBox = document.querySelector("#checkbox").checked;
 
         let json = {
@@ -192,7 +241,8 @@
             family: family,
             phones: phones,
             emails: emails,
-            checkBox: checkBox
+            checkBox: checkBox,
+            image: imageName
         };
 
 
@@ -218,13 +268,50 @@
                 window.location.href = data.url;
             },
             error: function (data) {
-                alert(url)
+                alert('error')
             }
 
         });
 
     }
 
+    //Upload Image Ajax
+    $(document).ready(function (e) {
+
+        $('#imageUploadForm').on('submit', (function (e) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('image.save')}}",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $('#original').attr('src', '/public/image/' + data.photo_name);
+                    $('#original').attr('alt', data.photo_name);
+                    // $('#thumbImg').attr('src', 'public/thumbnail/' + data.photo_name);
+                },
+
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+
+
+        }));
+
+    });
 
 </script>
 

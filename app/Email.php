@@ -8,7 +8,7 @@ class Email extends Model
 {
     //
     protected $guarded = [];
-    public $timestamps = false;
+//    public $timestamps = false;
 
     public function scopeGetContactEmails($query, $contactId)
     {

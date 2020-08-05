@@ -36,12 +36,18 @@
         </tr>
         @foreach($contacts as $contact)
             <tr>
-                {{--                <td>--}}
-                {{--                    <img id="profileImage" src="" class=" z-depth-1-half avatar-pic" alt="">--}}
-                {{--                </td>--}}
                 <td>
-{{--                    <img id="profileImage" src="{{'/public/image/'.$image->image}}" class=" z-depth-1-half avatar-pic"--}}
-{{--                         alt="">--}}
+
+                    @php
+                            $value = isset($contact->image) ? $contact->image->image : null;
+                    @endphp
+                    @isset($value)
+                        <img id="profileImage"
+                             src="{{'/public/image/'. $value  }}"
+                             class=" z-depth-1-half avatar-pic"
+                             alt="">
+                    @endif
+
                     <a
                         href={{route('contact.details',['id'=>$contact->user_id,'idContact'=>$contact->id])}}>{{$contact->name . ' ' .$contact->family}}</a>
                 </td>

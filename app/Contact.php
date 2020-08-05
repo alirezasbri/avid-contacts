@@ -8,7 +8,7 @@ class Contact extends Model
 {
     //
     protected $guarded = [];
-    public $timestamps = false;
+//    public $timestamps = false;
 
     public function scopeGetContactByID($query, $id)
     {

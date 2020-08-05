@@ -8,7 +8,7 @@ class PhoneNumber extends Model
 {
     //
     protected $guarded = [];
-    public $timestamps = false;
+//    public $timestamps = false;
 
     public function scopeGetPhoneNumbers($query, $contactId)
     {

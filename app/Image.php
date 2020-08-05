@@ -8,7 +8,7 @@ class Image extends Model
 {
     //
     protected $guarded = [];
-    public $timestamps = false;
+//    public $timestamps = false;
 
     public static function insertImage($contactId, $image)
     {

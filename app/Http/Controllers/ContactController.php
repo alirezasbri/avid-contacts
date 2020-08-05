@@ -45,24 +45,26 @@ class ContactController extends Controller
         else $type = "private";
         $contactId = Contact::insertContact($id, \request('name'), \request('family'), $type);
 
-        $phones = array_values(request('phones'));
-        $emails = array_values(request('emails'));
-
-//        dd($phones);
-        foreach ($phones as $pn) {
-            PhoneNumber::insertPhoneNumber($contactId, $pn);
+        if (request()->has('phones')) {
+            $phones = array_values(request('phones'));
+            foreach ($phones as $pn) {
+                PhoneNumber::insertPhoneNumber($contactId, $pn);
+            }
+        }
+        if (request()->has('emails')) {
+            $emails = array_values(request('emails'));
+            foreach ($emails as $email) {
+                Email::insertEmail($contactId, $email);
+            }
         }
 
-        foreach ($emails as $email) {
-            Email::insertEmail($contactId, $email);
+
+        if (request()->has('image') && request('image') != '') {
+            $image = new Image(['image' => \request('image')]);
+            $contact = Contact::find($contactId);
+            $contact->image()->save($image);
         }
 
-
-        $image = new Image(['image' => \request('image')]);
-
-        $contact = Contact::find($contactId);
-
-        $contact->image()->save($image);
 
         $result = ["url" => route('contact.index', $id)];
         return $result;
@@ -108,17 +110,32 @@ class ContactController extends Controller
 
         ]);
 
-        $phones = array_values(request('phones'));
-        $emails = array_values(request('emails'));
-
-        foreach ($phones as $pn) {
-            PhoneNumber::insertPhoneNumber($contact->id, $pn);
+        if (request()->has('phones')) {
+            $phones = array_values(request('phones'));
+            foreach ($phones as $pn) {
+                PhoneNumber::insertPhoneNumber($contact->id, $pn);
+            }
+        }
+        if (request()->has('emails')) {
+            $emails = array_values(request('emails'));
+            foreach ($emails as $email) {
+                Email::insertEmail($contact->id, $email);
+            }
         }
 
-        foreach ($emails as $email) {
-            Email::insertEmail($contact->id, $email);
-        }
 
+        if (request()->has('image') && request('image') != '') {
+            $contact = Contact::find($contact->id);
+            if (!is_null($contact->image))
+                $contact->image()->update(['image' => \request('image')]);
+            else {
+                $image = new Image(['image' => \request('image')]);
+                $contact->image()->save($image);
+            }
+
+        } else {
+            $contact->image()->delete();
+        }
         $result = ["url" => route('contact.index', $contact->user_id)];
         return $result;
 

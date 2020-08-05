@@ -150,7 +150,7 @@
             image: imageName
             // _token: $('meta[name="csrf-token"]').attr('content')
         };
-
+        // alert(phones);
 
         let url = '/user/' + {{$userId}}+'/contact/add';
         // alert({name: name, family: family});

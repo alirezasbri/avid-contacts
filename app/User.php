@@ -19,7 +19,7 @@ class User extends Authenticatable
 //    ];
 
     protected $guarded = [];
-    public $timestamps = false;
+//    public $timestamps = false;
 
     /**
      * The attributes that should be hidden for arrays.
