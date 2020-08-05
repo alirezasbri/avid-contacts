@@ -9,12 +9,13 @@ use App\PhoneNumber;
 
 class ContactController extends Controller
 {
-    function index($id)
+    function index()
     {
         if (session('isLogin', false)) {
-            $contacts = \App\Contact::where('user_id', $id)->get();
+//            dd(session('userId')->getId());
+            $contacts = \App\Contact::where('user_id', session('userId'))->get();
             $publicContacts = Contact::where('type', 'public')->orWhere('type', 'shared')->get();
-            return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => $id]);
+            return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => session('userId')]);
         } else return redirect()->route('user.login.form');
 
     }
@@ -25,25 +26,25 @@ class ContactController extends Controller
         return view('contact.show_contact', ['contact' => $contact]); //implicit bindings - id
     }
 
-    function showContact($id, $idContact)
+    function showContact($idContact)
     {
 
         $phoneNumbers = PhoneNumber::getPhoneNumbers($idContact);
         $emails = Email::getContactEmails($idContact);
         $contact = Contact::getContactByID($idContact);
-        $editable = Contact::isContactEditable($id, $contact->user_id);
+        $editable = Contact::isContactEditable(session('userId'), $contact->user_id);
 //        return dd($editable, $id, $contact);
         return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
     }
 
 
-    function addContact($id)
+    function addContact()
     {
 
         if (\request('checkBox') == 'true')
             $type = "shared";
         else $type = "private";
-        $contactId = Contact::insertContact($id, \request('name'), \request('family'), $type);
+        $contactId = Contact::insertContact(session('userId'), \request('name'), \request('family'), $type);
 
         if (request()->has('phones')) {
             $phones = array_values(request('phones'));
@@ -66,7 +67,7 @@ class ContactController extends Controller
         }
 
 
-        $result = ["url" => route('contact.index', $id)];
+        $result = ["url" => route('contact.index', session('userId'))];
         return $result;
     }
 

@@ -14,7 +14,8 @@ class UserController extends Controller
         $password = request('password');
         if (User::isExist($username, $password)) {
             session(['isLogin' => true]);
-            return redirect()->route('contact.index', User::getUserID($username));
+            session(['userId' => User::getUserID($username)->id]);
+            return redirect()->route('contact.index');
         } else{
             return view('user.login2');
         }

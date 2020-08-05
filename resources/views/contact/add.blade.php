@@ -152,7 +152,7 @@
         };
         // alert(phones);
 
-        let url = '/user/' + {{$userId}}+'/contact/add';
+        let url = '/contact/add';
         // alert({name: name, family: family});
 
         $.ajaxSetup({

@@ -34,13 +34,13 @@ Route::name('user.login')->post('/login', 'UserController@login');
 Route::name('user.register')->post('/register', 'UserController@register');
 
 //Contact Routes
-Route::name('contact.index')->get('/user/{id}/contacts', 'ContactController@index');
+Route::name('contact.index')->get('/contacts', 'ContactController@index');
 //Route::name('contact.show')->get('/contact/{contact}', 'ContactController@show');
-Route::name('contact.details')->get('/user/{id}/contact/{idContact}', 'ContactController@showContact');
+Route::name('contact.details')->get('/contact/{idContact}', 'ContactController@showContact');
 Route::name('contact.create')->get('/contact/create', 'ContactController@createContact');
 Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@updateContact');
-Route::name('contact.add.form')->get('/user/{userId}/add', function ($userId) {
-    return view('contact.add', ['userId' => $userId]);
+Route::name('contact.add.form')->get('/add', function () {
+    return view('contact.add', ['userId' => session('userId')]);
 });
 Route::name('contact.edit.form')->get('/contact/edit/{idContact}', 'ContactController@editFormContact');
 
@@ -50,7 +50,7 @@ Route::name('phoneNumber.delete')->get('/phonenumber/delete/{idPhoneNumber}', 'P
 Route::name('email.delete')->get('/email/delete/{idEmail}', 'EmailController@deleteEmail');
 
 
-Route::name('contact.add')->post('/user/{id}/contact/add', 'ContactController@addContact');
+Route::name('contact.add')->post('/contact/add', 'ContactController@addContact');
 Route::name('contact.edit')->post('/contact/edit/{id}', 'ContactController@editContact');
 Route::name('phoneNumber.add')->post('/contact/phonenumber/add/{id}', 'PhoneNumberController@addPhoneNumber');
 
