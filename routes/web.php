@@ -36,13 +36,13 @@ Route::name('user.register')->post('/register', 'UserController@register');
 //Contact Routes
 Route::name('contact.index')->get('/contacts', 'ContactController@index');
 //Route::name('contact.show')->get('/contact/{contact}', 'ContactController@show');
-Route::name('contact.details')->get('/contact/{idContact}', 'ContactController@showContact');
+Route::name('contact.details')->get('/contact/{contactSlug}', 'ContactController@showContact');
 Route::name('contact.create')->get('/contact/create', 'ContactController@createContact');
 Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@updateContact');
 Route::name('contact.add.form')->get('/add', function () {
     return view('contact.add', ['userId' => session('userId')]);
 });
-Route::name('contact.edit.form')->get('/contact/edit/{idContact}', 'ContactController@editFormContact');
+Route::name('contact.edit.form')->get('/contact/edit/{contactSlug}', 'ContactController@editFormContact');
 
 Route::name('contact.delete')->get('/user/{id}/contact/delete/{idContact}', 'ContactController@deleteContact');
 

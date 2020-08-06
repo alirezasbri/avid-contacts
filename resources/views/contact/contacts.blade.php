@@ -41,7 +41,7 @@
                 <td>
 
                     @php
-                            $value = isset($contact->image) ? $contact->image->image : null;
+                        $value = isset($contact->image) ? $contact->image->image : null;
                     @endphp
                     @isset($value)
                         <img id="profileImage"
@@ -51,7 +51,7 @@
                     @endif
 
                     <a
-                        href={{route('contact.details',['id'=>$contact->user_id,'idContact'=>$contact->id])}}>{{$contact->name . ' ' .$contact->family}}</a>
+                        href={{route('contact.details',['contactSlug'=>$contact->slug])}}>{{$contact->name . ' ' .$contact->family}}</a>
                 </td>
 
                 <td>
@@ -68,7 +68,7 @@
         @foreach($publicContacts as $pContact)
             <tr>
                 <td><a
-                        href={{route('contact.details',['id'=>$userId,'idContact'=>$pContact->id])}}>{{$pContact->name . ' ' .$pContact->family}}</a>
+                        href={{route('contact.details',['contactSlug'=>$pContact->slug])}}>{{$pContact->name . ' ' .$pContact->family}}</a>
                 </td>
 
                 {{--                <td><a href="{{route('contact.delete',$contact->id)}}">حذف</a>--}}

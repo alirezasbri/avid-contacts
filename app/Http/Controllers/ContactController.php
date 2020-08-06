@@ -26,12 +26,11 @@ class ContactController extends Controller
         return view('contact.show_contact', ['contact' => $contact]); //implicit bindings - id
     }
 
-    function showContact($idContact)
+    function showContact($slug)
     {
-
-        $phoneNumbers = PhoneNumber::getPhoneNumbers($idContact);
-        $emails = Email::getContactEmails($idContact);
-        $contact = Contact::getContactByID($idContact);
+        $contact = Contact::getContactBySlug($slug);
+        $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
+        $emails = Email::getContactEmails($contact->id);
         $editable = Contact::isContactEditable(session('userId'), $contact->user_id);
 //        return dd($editable, $id, $contact);
         return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
@@ -82,15 +81,17 @@ class ContactController extends Controller
 //        ]); // delete , destroy (multi delete)
 //    }
 
-    function editFormContact($idContact)
+    function editFormContact($slug)
     {
-        $phoneNumbers = PhoneNumber::getPhoneNumbers($idContact);
-        $emails = Email::getContactEmails($idContact);
-        $contact = Contact::getContactByID($idContact);
+
+        $contact = Contact::getContactBySlug($slug);
+        $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
+        $emails = Email::getContactEmails($contact->id);
+
 
 //
 
-        return view('contact.edit', ['idContact' => $idContact,
+        return view('contact.edit', ['contactSlug' => $contact->slug,
             'contact' => $contact,
             'phoneNumbers' => $phoneNumbers,
             'emails' => $emails]);
@@ -98,11 +99,9 @@ class ContactController extends Controller
 
     function editContact($id)
     {
-
-        $phoneNumbers = PhoneNumber::getPhoneNumbers($id);
-        $emails = Email::getContactEmails($id);
+//        return dd($slug);
         $contact = Contact::getContactByID($id);
-
+//        return dd($contact);
         if (request('checkBox'))
             $type = "shared";
         else $type = "private";

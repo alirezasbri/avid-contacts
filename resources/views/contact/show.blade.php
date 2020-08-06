@@ -26,7 +26,7 @@
 </table>
 
 @if($editable)
-    <a href="{{route('contact.edit.form',[$contact->id])}}">
+    <a href="{{route('contact.edit.form',[$contact->slug])}}">
         {{--<a href="{{route('user.login.form')}}">--}}
         <button class="btn btn-danger" style="margin: 5px">اصلاح مخاطب</button>
     </a>

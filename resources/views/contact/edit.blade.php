@@ -22,6 +22,7 @@
     </style>
 </head>
 <body style="margin: 30px" class="col-md-5">
+
 <h1>Contact Edit Form</h1>
 {{--<form action="{{ route('contact.edit',$idContact) }}" method="post">--}}
 {{--    {!! csrf_field() !!}--}}
@@ -242,7 +243,6 @@
     }
 
     function savePhonesAndEmails() {
-
         let phones = '';
         let emails = '';
         let types = [];
@@ -282,7 +282,7 @@
 
 
         let url = '/contact/edit/' + {{$contact->id}} +'';
-        // alert({name: name, family: family});
+        // alert(url);
 
         $.ajaxSetup({
 
