@@ -8,6 +8,7 @@ class PhoneNumber extends Model
 {
     //
     protected $guarded = [];
+
 //    public $timestamps = false;
 
     public function scopeGetPhoneNumbers($query, $contactId)
@@ -15,11 +16,12 @@ class PhoneNumber extends Model
         return $query->where('contact_id', $contactId)->get();
     }
 
-    public static function insertPhoneNumber($contactId, $phoneNumber)
+    public static function insertPhoneNumber($contactId, $phoneNumber, $type)
     {
         PhoneNumber::create([
             'contact_id' => $contactId,
-            'phone_number' => $phoneNumber
+            'phone_number' => $phoneNumber,
+            'type' => $type
         ]);
     }
 

@@ -46,10 +46,13 @@ class ContactController extends Controller
         else $type = "private";
         $contactId = Contact::insertContact(session('userId'), \request('name'), \request('family'), $type);
 
-        if (request()->has('phones')) {
+        if (request()->has('phones') && request()->has('types')) {
             $phones = array_values(request('phones'));
+            $types = array_values(request('types'));
+            $i = 0;
             foreach ($phones as $pn) {
-                PhoneNumber::insertPhoneNumber($contactId, $pn);
+                PhoneNumber::insertPhoneNumber($contactId, $pn, $types[$i]);
+                $i++;
             }
         }
         if (request()->has('emails')) {
@@ -111,10 +114,13 @@ class ContactController extends Controller
 
         ]);
 
-        if (request()->has('phones')) {
+        if (request()->has('phones') && request()->has('types')) {
             $phones = array_values(request('phones'));
+            $types = array_values(request('types'));
+            $i = 0;
             foreach ($phones as $pn) {
-                PhoneNumber::insertPhoneNumber($contact->id, $pn);
+                PhoneNumber::insertPhoneNumber($contact->id, $pn, $types[$i]);
+                $i++;
             }
         }
         if (request()->has('emails')) {

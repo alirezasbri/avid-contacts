@@ -63,6 +63,13 @@
 <div class="form-group">
     <label for="phone">Phone Number</label>
     <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+
+    <label for="types">نوع شماره:</label>
+    <select name="types" id="types">
+        <option value="mobile">موبایل</option>
+        <option value="phone">ثابت</option>
+    </select>
+
     <button id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
 </div>
 <div id="divPhone"></div>
@@ -77,12 +84,12 @@
 {{--</form>--}}
 
 
-<table class="table table-striped">
+<table class="table">
     @foreach($phoneNumbers as $pn)
         <tr>
             <td>{{$pn->phone_number}}
             </td>
-
+            <td> {{$pn->type}}</td>
             <td>
                 <button id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
             </td>
@@ -90,7 +97,7 @@
     @endforeach
 </table>
 
-<table class="table table-striped">
+<table class="table">
     @foreach($emails as $email)
         <tr>
             <td>{{$email->email_address}}
@@ -117,7 +124,7 @@
                         @isset($value)
 
                             <img id="original" src="{{'/public/image/'. $value  }}" class="z-depth-1-half avatar-pic"
-                                 alt="">
+                                 alt="{{$value}}">
                             <button id="delImage" onclick="deleteImage()">حذف</button>
 
                         @else
@@ -181,6 +188,22 @@
         document.getElementById("delImage").style.display = "none";
     }
 
+    /*function addPhone() {
+
+        let phoneNumber = document.getElementById("phone").value;
+        let filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        if (filter.test(phoneNumber)) {
+            let para = document.createElement("input");
+            para.setAttribute("name", "phones[]");
+            para.setAttribute("value", document.getElementById("phone").value);
+            para.innerHTML = document.getElementById("phone").value;
+            document.getElementById("phone").value = "";
+            document.getElementById("divPhone").appendChild(para);
+        } else {
+            alert('phone number is invalid!');
+        }
+    }*/
+
     function addPhone() {
 
         let phoneNumber = document.getElementById("phone").value;
@@ -189,6 +212,7 @@
             let para = document.createElement("input");
             para.setAttribute("name", "phones[]");
             para.setAttribute("value", document.getElementById("phone").value);
+            para.setAttribute("alt", document.getElementById("types").value);
             para.innerHTML = document.getElementById("phone").value;
             document.getElementById("phone").value = "";
             document.getElementById("divPhone").appendChild(para);
@@ -221,6 +245,8 @@
 
         let phones = '';
         let emails = '';
+        let types = [];
+
         phones = $("input[name='phones[]']")
             .map(function () {
                 return $(this).val();
@@ -231,6 +257,14 @@
                 return $(this).val();
             }).get();
 
+        let els = document.querySelectorAll('input');
+
+        for (let i = 0; i < els.length; i++) {
+            if (els[i].name.indexOf("phones") > -1) {
+                types.push(els[i].alt);
+            }
+        }
+
         let name = document.getElementById("name").value;
         let family = document.getElementById("family").value;
         let imageName = document.getElementById("original").alt;
@@ -240,6 +274,7 @@
             name: name,
             family: family,
             phones: phones,
+            types: types,
             emails: emails,
             checkBox: checkBox,
             image: imageName

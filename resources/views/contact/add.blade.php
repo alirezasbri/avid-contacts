@@ -44,6 +44,12 @@
 <div class="form-group">
     <label for="phone">Phone Number</label>
     <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+
+    <label for="types">نوع شماره:</label>
+    <select name="types" id="types">
+        <option value="mobile">موبایل</option>
+        <option value="phone">ثابت</option>
+    </select>
     <button style="margin-top: 5px " id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
 </div>
 <div id="divPhone"></div>
@@ -95,6 +101,7 @@
             let para = document.createElement("input");
             para.setAttribute("name", "phones[]");
             para.setAttribute("value", document.getElementById("phone").value);
+            para.setAttribute("alt", document.getElementById("types").value);
             para.innerHTML = document.getElementById("phone").value;
             document.getElementById("phone").value = "";
             document.getElementById("divPhone").appendChild(para);
@@ -129,6 +136,15 @@
                 return $(this).val();
             }).get();
 
+        let types = [];
+        let els = document.querySelectorAll('input');
+
+        for (let i = 0; i < els.length; i++) {
+            if (els[i].name.indexOf("phones") > -1) {
+                types.push(els[i].alt);
+            }
+        }
+
         let emails = $("input[name='emails[]']")
             .map(function () {
                 return $(this).val();
@@ -145,6 +161,7 @@
             name: name,
             family: family,
             phones: phones,
+            types: types,
             emails: emails,
             checkBox: checkBox,
             image: imageName
