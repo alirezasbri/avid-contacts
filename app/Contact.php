@@ -42,8 +42,14 @@ class Contact extends Model
     {
         if ($userId == $contactUserId)
             return true;
-        else false;
+        else return false;
     }
+
+    public function scopeIsExistSlug($query, $slug)
+    {
+        return $query->where('slug', $slug)->exists();
+    }
+
 
     //Relationships
     public function user()

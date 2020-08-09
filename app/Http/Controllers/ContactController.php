@@ -28,6 +28,11 @@ class ContactController extends Controller
 
     function showContact($slug)
     {
+        $isExistSlug = Contact::isExistSlug($slug);
+
+        if (!$isExistSlug)
+            abort(404);
+
         $contact = Contact::getContactBySlug($slug);
         $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
         $emails = Email::getContactEmails($contact->id);
@@ -83,18 +88,20 @@ class ContactController extends Controller
 
     function editFormContact($slug)
     {
+        $isExistSlug = Contact::isExistSlug($slug);
 
+        if (!$isExistSlug)
+            abort(404);
         $contact = Contact::getContactBySlug($slug);
         $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
         $emails = Email::getContactEmails($contact->id);
 
 
-//
-
         return view('contact.edit', ['contactSlug' => $contact->slug,
             'contact' => $contact,
             'phoneNumbers' => $phoneNumbers,
             'emails' => $emails]);
+
     }
 
     function editContact($id)
