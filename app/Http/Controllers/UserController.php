@@ -16,7 +16,7 @@ class UserController extends Controller
             session(['isLogin' => true]);
             session(['userId' => User::getUserID($username)->id]);
             return redirect()->route('contact.index');
-        } else{
+        } else {
             return view('user.login2');
         }
 
@@ -33,11 +33,10 @@ class UserController extends Controller
     function register()
     {
         $this->validate(\request(), [
-            'username' => 'required',
-            'password' => 'required'
-        ], [
-            'username.required' => 'نام کاربری الزامیست',
-            'password.required' => 'رمز عبور الزامیست'
+            'username' => 'required|min:5|max:16',
+            'password' => 'required|min:8|max:32',
+            'name' => 'required|min:3|max:16',
+            'family' => 'required|min:3|max:24'
         ]);
 
         $username = request('username');
