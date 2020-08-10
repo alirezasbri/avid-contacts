@@ -5,6 +5,7 @@
 /storage/*.key
 /vendor
 .idea
+.idea/workspace.xml
 .editorconfig
 .env
 .env.backup

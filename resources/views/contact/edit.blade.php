@@ -170,7 +170,11 @@
     function addPhone() {
 
         let phoneNumber = document.getElementById("phone").value;
-        let filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+
+        let mobileFilter = /^(\+98|0098|98|0)?9\d{9}$/;
+        let phoneFilter = /^(\+98|0098|98|0)[1-9]\d{9}$/;
+        let filter = new RegExp("(" + mobileFilter.source + ")|(" + phoneFilter.source + ")");
+
         if (filter.test(phoneNumber)) {
             let para = document.createElement("input");
             para.setAttribute("name", "phones[]");
