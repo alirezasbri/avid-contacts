@@ -19,7 +19,7 @@
 
 </head>
 <body>
-<a href="{{route('contact.add.form',$userId)}}">
+<a href="{{route('contact.add.form')}}">
     <button class="btn btn-danger" style="margin: 5px">اضافه کردن مخاطب</button>
 </a>
 <a href="{{route('user.logout')}}">
@@ -27,7 +27,7 @@
 </a>
 
 <hr>
-<div align="right">
+<div style="text-align: right">
     <table class="table table-striped">
         <tr>
             <th>مخاطب</th>
@@ -108,11 +108,8 @@
             type: 'GET',
             success: function (res) {
                 location.reload();
-                // console.log(res);
-                // alert(res);
             },
             fail: function (xhr, textStatus, errorThrown) {
-                // alert(contactId);
             }
         });
     }
