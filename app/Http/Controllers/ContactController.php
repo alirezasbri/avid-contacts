@@ -45,6 +45,13 @@ class ContactController extends Controller
     function addContact()
     {
 
+        $this->validate(request(), [
+            'name' => 'required|min:3|max:16',
+            'family' => 'required|min:3|max:24',
+            'emails' => ' required',
+            'phones' => 'required'
+        ]);
+
         if (\request('checkBox') == 'true')
             $type = "shared";
         else $type = "private";

@@ -20,6 +20,11 @@
 <h1>Contact Add Form</h1>
 {{--<form action="{{ route('contact.add',$userId) }}" method="post">--}}
 {{--{!! csrf_field() !!}--}}
+
+<div id="div" class="alert alert-danger" style="display: none">
+
+</div>
+
 <div class="form-group">
     <label for="name">Name</label>
     <input type="text" name="name" class="form-control" id="name" placeholder="Name">
@@ -131,6 +136,11 @@
     }
 
     function savePhonesAndEmails() {
+
+        let errorDiv = document.getElementById("div");
+        errorDiv.style.display = "none";
+
+
         let phones = $("input[name='phones[]']")
             .map(function () {
                 return $(this).val();
@@ -155,7 +165,6 @@
         let imageName = document.getElementById("original").alt;
         let checkBox = document.querySelector("#checkbox").checked;
 
-        // alert(imageName);
 
         let json = {
             name: name,
@@ -165,12 +174,9 @@
             emails: emails,
             checkBox: checkBox,
             image: imageName
-            // _token: $('meta[name="csrf-token"]').attr('content')
         };
-        // alert(phones);
 
         let url = '/contact/add';
-        // alert({name: name, family: family});
 
         $.ajaxSetup({
 
@@ -183,16 +189,23 @@
         $.ajax({
             url: url,
             type: 'POST',
-            // data: {name: name, family: family},
             data: json,
             dataType: 'JSON',
-            // contentType: 'application/json',
             success: function (data) {
                 window.location.href = data.url;
-                // alert(data.url.toString())
             },
             error: function (data) {
-                alert('error')
+
+                let response = JSON.parse(data.responseText);
+                let errorString = '<ul>';
+                $.each(response.errors, function (key, value) {
+                    errorString += '<li>' + value + '</li>';
+                });
+                errorString += '</ul>';
+
+                $('#div').html(errorString);
+                $('#div').show();
+
             }
 
         });
@@ -223,7 +236,6 @@
                 success: function (data) {
                     $('#original').attr('src', '/public/image/' + data.photo_name);
                     $('#original').attr('alt', data.photo_name);
-                    // $('#thumbImg').attr('src', 'public/thumbnail/' + data.photo_name);
                 },
 
                 error: function (data) {
