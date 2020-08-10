@@ -179,6 +179,7 @@
 
     function deleteImage() {
         document.getElementById("original").src = "";
+        document.getElementById("original").alt = "";
         document.getElementById("delImage").style.display = "none";
     }
 
