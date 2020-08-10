@@ -27,14 +27,12 @@
 </a>
 
 <hr>
-<h2 align="right">خصوصی</h2><br>
 <div align="right">
     <table class="table table-striped">
         <tr>
-            {{--            <th>عکس</th>--}}
             <th>مخاطب</th>
+            <th>نوع</th>
             <th>عملیات</th>
-
         </tr>
         @foreach($contacts as $contact)
             <tr>
@@ -54,27 +52,48 @@
                         href={{route('contact.details',['contactSlug'=>$contact->slug])}}>{{$contact->name . ' ' .$contact->family}}</a>
                 </td>
 
+                @switch($contact->type)
+                    @case('private')
+                    <td>خصوصی</td>
+                    @break
+
+                    @case('public')
+                    <td>عمومی</td>
+                    @break
+
+                    @case('shared')
+                    <td>اشتراکی</td>
+                    @break
+                @endswitch
+
                 <td>
                     <button id="del" onclick="deleteFunc({{$contact->id}})">حذف</button>
                 </td>
             </tr>
         @endforeach
-    </table>
-</div>
 
-<h2 align="right">عمومی</h2>
-<div align="right">
-    <table class="table table-striped">
         @foreach($publicContacts as $pContact)
             <tr>
                 <td><a
                         href={{route('contact.details',['contactSlug'=>$pContact->slug])}}>{{$pContact->name . ' ' .$pContact->family}}</a>
                 </td>
 
-                {{--                <td><a href="{{route('contact.delete',$contact->id)}}">حذف</a>--}}
-                {{--                </td>--}}
+                @switch($pContact->type)
+                    @case('private')
+                    <td>خصوصی</td>
+                    @break
+
+                    @case('public')
+                    <td>عمومی</td>
+                    @break
+
+                    @case('shared')
+                    <td>اشتراکی</td>
+                    @break
+                @endswitch
             </tr>
         @endforeach
+
     </table>
 </div>
 </body>
