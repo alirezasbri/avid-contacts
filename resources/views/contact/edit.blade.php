@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="rtl" lang="fa">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -18,118 +18,134 @@
 </head>
 <body style="margin: 30px" class="col-md-5">
 
-<h1>Contact Edit Form</h1>
+<h1 style="text-align: right">فرم اصلاح مخاطب</h1>
 
-<div id="div" class="alert alert-danger" style="display: none">
+<div style="text-align: right">
+    <div id="div" class="alert alert-danger" style="display: none">
 
-</div>
+    </div>
 
-<div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" name="name" class="form-control" id="name" placeholder="Name"
-           value="{{$contact->name}}">
-</div>
-<div class="form-group">
-    <label for="family">Family</label>
-    <input type="text" name="family" class="form-control" id="family" placeholder="Family"
-           value="{{$contact->family}}">
-</div>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" id="name" placeholder="Name"
+               value="{{$contact->name}}">
+    </div>
+    <div class="form-group">
+        <label for="family">Family</label>
+        <input type="text" name="family" class="form-control" id="family" placeholder="Family"
+               value="{{$contact->family}}">
+    </div>
 
-<div class="form-check">
-    @if($contact->type == 'shared')
-        <input id="checkbox" class="form-check-input" type="checkbox" value="" checked>
-    @else
-        <input id="checkbox" class="form-check-input" type="checkbox" value="">
-    @endif
-    <label class="form-check-label" for="checkbox">
-        به اشتراک گذاشتن
-    </label>
-</div>
+    <div class="form-check">
+        @if($contact->type == 'shared')
+            <input id="checkbox" class="form-check-input" type="checkbox" value="" checked>
+        @else
+            <input id="checkbox" class="form-check-input" type="checkbox" value="">
+        @endif
+        <label class="form-check-label" for="checkbox">
+            به اشتراک گذاشتن
+        </label>
+    </div>
 
-<button onclick="savePhonesAndEmails()" class="btn btn-primary">Submit</button>
-<div class="form-group">
-    <label for="phone">Phone Number</label>
-    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+    <button onclick="savePhonesAndEmails()" class="btn btn-primary">Submit</button>
+    <hr>
+    <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+        <br>
+        <label for="types">نوع شماره:</label>
+        <select name="types" id="types">
+            <option value="mobile">موبایل</option>
+            <option value="phone">ثابت</option>
+        </select>
+        <br>
+        <button id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
+    </div>
+    <div id="divPhone"></div>
+    <hr>
 
-    <label for="types">نوع شماره:</label>
-    <select name="types" id="types">
-        <option value="mobile">موبایل</option>
-        <option value="phone">ثابت</option>
-    </select>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
+        <br>
+        <button id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
+    </div>
+    <div id="divEmail"></div>
+    <hr>
 
-    <button id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
-</div>
-<div id="divPhone"></div>
-<div class="form-group">
-    <label for="email">Email Address</label>
-    <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
-    <button id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
-</div>
-<div id="divEmail"></div>
+    <table class="table">
+        @foreach($phoneNumbers as $pn)
+            <tr>
+                <td>{{$pn->phone_number}}
+                </td>
+                @switch($pn->type)
+                    @case('mobile')
+                    <td>موبایل</td>
+                    @break
 
+                    @case('phone')
+                    <td>ثابت</td>
+                    @break
+                @endswitch
 
-<table class="table">
-    @foreach($phoneNumbers as $pn)
-        <tr>
-            <td>{{$pn->phone_number}}
-            </td>
-            <td> {{$pn->type}}</td>
-            <td>
-                <button id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
-            </td>
-        </tr>
-    @endforeach
-</table>
+                <td>
+                    <button id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
+                </td>
+            </tr>
+        @endforeach
+    </table>
 
-<table class="table">
-    @foreach($emails as $email)
-        <tr>
-            <td>{{$email->email_address}}
-            </td>
+    <table class="table">
+        @foreach($emails as $email)
+            <tr>
+                <td>{{$email->email_address}}
+                </td>
 
-            <td>
-                <button id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
-            </td>
-        </tr>
-    @endforeach
-</table>
+                <td>
+                    <button id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
+                </td>
+            </tr>
+        @endforeach
+    </table>
 
-<h3>عکس پروفایل</h3>
-<br>
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
-            <div class="file-field">
-                <div class="row">
-                    <div class=" col-md-8 mb-4">
-                        @php
-                            $value = isset($contact->image) ? $contact->image->image : null;
-                        @endphp
-                        @isset($value)
+    <h3>عکس پروفایل</h3>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
+                <div class="file-field">
+                    <div class="row">
+                        <div class=" col-md-8 mb-4">
+                            @php
+                                $value = isset($contact->image) ? $contact->image->image : null;
+                            @endphp
+                            @isset($value)
 
-                            <img id="original" src="{{'/public/image/'. $value  }}" class="z-depth-1-half avatar-pic"
-                                 alt="{{$value}}">
-                            <button id="delImage" onclick="deleteImage()">حذف</button>
+                                <img id="original" src="{{'/public/image/'. $value  }}"
+                                     class="z-depth-1-half avatar-pic"
+                                     alt="{{$value}}">
+                                <button id="delImage" onclick="deleteImage()">حذف</button>
 
-                        @else
-                            <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
-                        @endif
-                        <div class="d-flex justify-content-center mt-3">
-                            <div class="btn btn-mdb-color btn-rounded float-left">
-                                <input type="file" name="photo_name" id="photo_name" required=""> <br>
-                                <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
-                                    ثبت عکس
-                                </button>
+                            @else
+                                <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
+                            @endif
+                            <div class="d-flex justify-content-center mt-3">
+                                <div class="btn btn-mdb-color btn-rounded float-left">
+                                    <input type="file" name="photo_name" id="photo_name" required=""> <br>
+                                    <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
+                                        ثبت عکس
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class=" col-md-4 mb-4">
-                        <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
-                             alt="">
+                        <div class=" col-md-4 mb-4">
+                            <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
+                                 alt="">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 

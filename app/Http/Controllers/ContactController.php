@@ -128,7 +128,8 @@ class ContactController extends Controller
         }
 
         $contact = Contact::getContactByID($id);
-        if (request('checkBox'))
+
+        if (request('checkBox') == 'true')
             $type = "shared";
         else $type = "private";
 
