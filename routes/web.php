@@ -17,12 +17,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('user.login.form');
+    if (session('isLogin', false))
+        return redirect()->route('contact.index');
+    else
+        return redirect()->route('user.login.form');
 });
 
 //User Routes
 Route::name('user.login.form')->get('/login', function () {
-    return view('user.login');
+    if (session('isLogin', false))
+        return redirect()->route('contact.index');
+    else
+        return view('user.login');
 });
 Route::name('user.register.form')->get('/register', function () {
     return view('user.register');
