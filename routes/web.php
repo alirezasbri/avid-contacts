@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 //User Routes
 Route::name('user.login.form')->get('/login', function () {
-    return view('user.login2');
+    return view('user.login');
 });
 Route::name('user.register.form')->get('/register', function () {
     return view('user.register');
