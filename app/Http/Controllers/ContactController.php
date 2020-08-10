@@ -55,6 +55,7 @@ class ContactController extends Controller
         if (\request('checkBox') == 'true')
             $type = "shared";
         else $type = "private";
+
         $contactId = Contact::insertContact(session('userId'), \request('name'), \request('family'), $type);
 
         if (request()->has('phones') && request()->has('types')) {
@@ -85,14 +86,6 @@ class ContactController extends Controller
         return $result;
     }
 
-//    function updateContact($id)
-//    {
-//        $contact = \App\Contact::find($id);
-//        $contact->update([
-//            'name' => 'قاسم نقی'
-//        ]); // delete , destroy (multi delete)
-//    }
-
     function editFormContact($slug)
     {
         $isExistSlug = Contact::isExistSlug($slug);
@@ -113,9 +106,28 @@ class ContactController extends Controller
 
     function editContact($id)
     {
-//        return dd($slug);
+
+        $phoneNumbers = PhoneNumber::getPhoneNumbers($id);
+        $emails = Email::getContactEmails($id);
+
+        $this->validate(request(), [
+            'name' => 'required|min:3|max:16',
+            'family' => 'required|min:3|max:24',
+        ]);
+
+        if ($phoneNumbers->isEmpty()) {
+            $this->validate(request(), [
+                'phones' => 'required',
+            ]);
+        }
+
+        if ($emails->isEmpty()) {
+            $this->validate(request(), [
+                'emails' => 'required',
+            ]);
+        }
+
         $contact = Contact::getContactByID($id);
-//        return dd($contact);
         if (request('checkBox'))
             $type = "shared";
         else $type = "private";
@@ -124,7 +136,6 @@ class ContactController extends Controller
             'name' => request('name'),
             'family' => request('family'),
             'type' => $type
-
         ]);
 
         if (request()->has('phones') && request()->has('types')) {
@@ -136,13 +147,13 @@ class ContactController extends Controller
                 $i++;
             }
         }
+
         if (request()->has('emails')) {
             $emails = array_values(request('emails'));
             foreach ($emails as $email) {
                 Email::insertEmail($contact->id, $email);
             }
         }
-
 
         if (request()->has('image') && request('image') != '') {
             $contact = Contact::find($contact->id);
@@ -152,14 +163,12 @@ class ContactController extends Controller
                 $image = new Image(['image' => \request('image')]);
                 $contact->image()->save($image);
             }
-
         } else {
             $contact->image()->delete();
         }
         $result = ["url" => route('contact.index', $contact->user_id)];
         return $result;
 
-//        return redirect()->route('contact.index', $contact->user_id);
     }
 
     public function deleteContact($id, $idContact)

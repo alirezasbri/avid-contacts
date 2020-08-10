@@ -56,7 +56,7 @@ return array(
     "not_in" => ":attribute انتخاب شده، معتبر نیست.",
     "numeric" => ":attribute باید شامل عدد باشد.",
     "regex" => ":attribute یک فرمت معتبر نیست",
-    "required" => "فیلد :attribute الزامی است",
+    "required" => "وارد کردن :attribute الزامی است",
     "required_if" => "فیلد :attribute هنگامی که :other برابر با :value است، الزامیست.",
     "required_with" => ":attribute الزامی است زمانی که :values موجود است.",
     "required_with_all" => ":attribute الزامی است زمانی که :values موجود است.",
@@ -127,6 +127,8 @@ return array(
         "date" => "تاریخ",
         "time" => "زمان",
         "available" => "موجود",
-        "size" => "اندازه"
+        "size" => "اندازه",
+        "phones" => "شماره تماس",
+        "emails" => "ایمیل‌"
     ),
 );

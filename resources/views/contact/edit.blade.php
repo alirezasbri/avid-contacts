@@ -9,11 +9,6 @@
     <title>Edit Contact</title>
 
     @include('layouts.bootstrap')
-    {{--    <!-- Custom styles for this template -->--}}
-    {{--    <link href = {{ asset("bootstrap/css/sticky-footer-navbar.css") }} rel="stylesheet" />--}}
-
-    {{--    <!-- Optional theme -->--}}
-    {{--    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}">--}}
 
     <style>
         .avatar-pic {
@@ -24,8 +19,11 @@
 <body style="margin: 30px" class="col-md-5">
 
 <h1>Contact Edit Form</h1>
-{{--<form action="{{ route('contact.edit',$idContact) }}" method="post">--}}
-{{--    {!! csrf_field() !!}--}}
+
+<div id="div" class="alert alert-danger" style="display: none">
+
+</div>
+
 <div class="form-group">
     <label for="name">Name</label>
     <input type="text" name="name" class="form-control" id="name" placeholder="Name"
@@ -49,18 +47,6 @@
 </div>
 
 <button onclick="savePhonesAndEmails()" class="btn btn-primary">Submit</button>
-{{--    <div class="form-group">--}}
-{{--        <label for="phone">Phone Number</label>--}}
-{{--        <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number"--}}
-{{--               value="{{$phoneNumbers}}">--}}
-{{--    </div>--}}
-
-{{--    <div class="form-group">--}}
-{{--        <label for="email">Email Address</label>--}}
-{{--        <input type="text" name="email" class="form-control" id="email" placeholder="Email Address"--}}
-{{--               value="{{$emails}}">--}}
-{{--    </div>--}}
-
 <div class="form-group">
     <label for="phone">Phone Number</label>
     <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
@@ -80,9 +66,6 @@
     <button id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
 </div>
 <div id="divEmail"></div>
-
-
-{{--</form>--}}
 
 
 <table class="table">
@@ -159,11 +142,8 @@
             type: 'GET',
             success: function (res) {
                 location.reload();
-                // console.log(res);
-                // alert(res);
             },
             fail: function (xhr, textStatus, errorThrown) {
-                // alert(contactId);
             }
         });
     }
@@ -175,11 +155,8 @@
             type: 'GET',
             success: function (res) {
                 location.reload();
-                // console.log(res);
-                // alert(res);
             },
             fail: function (xhr, textStatus, errorThrown) {
-                // alert(contactId);
             }
         });
     }
@@ -189,21 +166,6 @@
         document.getElementById("delImage").style.display = "none";
     }
 
-    /*function addPhone() {
-
-        let phoneNumber = document.getElementById("phone").value;
-        let filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
-        if (filter.test(phoneNumber)) {
-            let para = document.createElement("input");
-            para.setAttribute("name", "phones[]");
-            para.setAttribute("value", document.getElementById("phone").value);
-            para.innerHTML = document.getElementById("phone").value;
-            document.getElementById("phone").value = "";
-            document.getElementById("divPhone").appendChild(para);
-        } else {
-            alert('phone number is invalid!');
-        }
-    }*/
 
     function addPhone() {
 
@@ -282,7 +244,6 @@
 
 
         let url = '/contact/edit/' + {{$contact->id}} +'';
-        // alert(url);
 
         $.ajaxSetup({
 
@@ -295,15 +256,22 @@
         $.ajax({
             url: url,
             type: 'POST',
-            // data: {name: name, family: family},
             data: json,
             dataType: 'JSON',
-            // contentType: 'application/json',
             success: function (data) {
                 window.location.href = data.url;
             },
             error: function (data) {
-                alert('error')
+
+                let response = JSON.parse(data.responseText);
+                let errorString = '<ul>';
+                $.each(response.errors, function (key, value) {
+                    errorString += '<li>' + value + '</li>';
+                });
+                errorString += '</ul>';
+
+                $('#div').html(errorString);
+                $('#div').show();
             }
 
         });
@@ -334,7 +302,6 @@
                 success: function (data) {
                     $('#original').attr('src', '/public/image/' + data.photo_name);
                     $('#original').attr('alt', data.photo_name);
-                    // $('#thumbImg').attr('src', 'public/thumbnail/' + data.photo_name);
                 },
 
                 error: function (data) {
