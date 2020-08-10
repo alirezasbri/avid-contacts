@@ -17,7 +17,7 @@ class UserController extends Controller
             session(['userId' => User::getUserID($username)->id]);
             return redirect()->route('contact.index');
         } else {
-            return view('user.login2');
+            return view('user.login2',['error'=>'نام کاربری یا کلمه عبور اشتباه است']);
         }
 
 //        dd(User::isExist($username, $password));

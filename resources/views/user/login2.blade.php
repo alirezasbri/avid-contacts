@@ -29,6 +29,7 @@
 </head>
 <body>
 
+
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
@@ -37,10 +38,11 @@
                 <span class="login100-form-title p-b-26">
 						Contacts
 					</span>
-                <span class="login100-form-title p-b-48">
-						<i class="zmdi zmdi-font"></i>
-					</span>
-
+                @isset($error)
+                    <div class="alert alert-danger">
+                        {{$error}}
+                    </div>
+                @endisset
                 <div class="wrap-input100">
                     <input class="input100" type="text" name="username">
                     <span class="focus-input100" data-placeholder="UserName"></span>
