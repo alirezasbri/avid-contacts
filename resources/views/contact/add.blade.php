@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="fa">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-    <title>Add Contact</title>
+    <title>اضافه کردن مخاطب</title>
 
     @include('layouts.bootstrap')
     <style>
@@ -17,81 +17,84 @@
 
 </head>
 <body style="margin: 30px" class="col-md-5">
-<h1>Contact Add Form</h1>
-{{--<form action="{{ route('contact.add',$userId) }}" method="post">--}}
-{{--{!! csrf_field() !!}--}}
+<h1 style="text-align: right">فرم اضافه کردن مخاطب</h1>
 
-<div id="div" class="alert alert-danger" style="display: none">
+<div style="text-align: right">
 
-</div>
+    <div id="div" class="alert alert-danger" style="display: none">
 
-<div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" name="name" class="form-control" id="name" placeholder="Name">
-</div>
-<div class="form-group">
-    <label for="family">Family</label>
-    <input type="text" name="family" class="form-control" id="family" placeholder="Family">
-</div>
-<div class="form-check">
-    <input id="checkbox" class="form-check-input" type="checkbox" value="">
-    <label class="form-check-label" for="defaultCheck1">
-        به اشتراک گذاشتن
-    </label>
-</div>
+    </div>
 
-<button style="margin-top: 5px " onclick="savePhonesAndEmails()" class="btn btn-primary">ثبت نهایی</button>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" id="name" placeholder="Name">
+    </div>
+    <div class="form-group">
+        <label for="family">Family</label>
+        <input type="text" name="family" class="form-control" id="family" placeholder="Family">
+    </div>
+    <div class="form-check">
+        <input id="checkbox" class="form-check-input" type="checkbox" value="">
+        <label class="form-check-label" for="defaultCheck1">
+            به اشتراک گذاشتن
+        </label>
+    </div>
 
-{{--</form>--}}
-<hr>
-{{--<button class="btn btn-primary" onclick="savePhonesAndEmails()">ثبت شماره و ایمیل</button>--}}
+    <button style="margin-top: 5px " onclick="savePhonesAndEmails()" class="btn btn-primary">ثبت نهایی</button>
 
-<div class="form-group">
-    <label for="phone">Phone Number</label>
-    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+    {{--</form>--}}
+    <hr>
+    {{--<button class="btn btn-primary" onclick="savePhonesAndEmails()">ثبت شماره و ایمیل</button>--}}
 
-    <label for="types">نوع شماره:</label>
-    <select name="types" id="types">
-        <option value="mobile">موبایل</option>
-        <option value="phone">ثابت</option>
-    </select>
-    <button style="margin-top: 5px " id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
-</div>
-<div id="divPhone"></div>
-<div class="form-group">
-    <label for="email">Email Address</label>
-    <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
-    <button style="margin-top: 5px " id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
-</div>
-<div id="divEmail"></div>
+    <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
 
-<h3>اضافه کردن عکس پروفایل</h3>
-<br>
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
-            <div class="file-field">
-                <div class="row">
-                    <div class=" col-md-8 mb-4">
-                        <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
-                        <div class="d-flex justify-content-center mt-3">
-                            <div class="btn btn-mdb-color btn-rounded float-left">
-                                <input type="file" name="photo_name" id="photo_name" required=""> <br>
-                                <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
-                                    ثبت عکس
-                                </button>
+        <label for="types">نوع شماره:</label>
+        <select name="types" id="types">
+            <option value="mobile">موبایل</option>
+            <option value="phone">ثابت</option>
+        </select>
+        <button style="margin-top: 5px " id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت شماره</button>
+    </div>
+    <div id="divPhone"></div>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
+        <button style="margin-top: 5px " id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت ایمیل</button>
+    </div>
+    <div id="divEmail"></div>
+
+    <h3>اضافه کردن عکس پروفایل</h3>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
+                <div class="file-field">
+                    <div class="row">
+                        <div class=" col-md-8 mb-4">
+                            <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
+                            <div class="d-flex justify-content-center mt-3">
+                                <div class="btn btn-mdb-color btn-rounded float-left">
+                                    <input type="file" name="photo_name" id="photo_name" required=""> <br>
+                                    <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
+                                        ثبت عکس
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class=" col-md-4 mb-4">
-                        <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
-                             alt="">
+                        <div class=" col-md-4 mb-4">
+                            <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
+                                 alt="">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+    
 </div>
+
 
 </body>
 
