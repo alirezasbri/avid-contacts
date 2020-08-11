@@ -59,5 +59,4 @@ Route::name('contact.edit')->post('/contact/edit/{id}', 'ContactController@editC
 Route::name('phoneNumber.add')->post('/contact/phonenumber/add/{id}', 'PhoneNumberController@addPhoneNumber');
 
 //Image Routes
-Route::name('image.show')->get('/image', 'ImageController@index');
 Route::name('image.save')->post('/save', 'ImageController@save');
