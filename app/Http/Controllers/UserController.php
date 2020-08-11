@@ -33,7 +33,7 @@ class UserController extends Controller
     function register()
     {
         $this->validate(\request(), [
-            'username' => 'required|min:5|max:16',
+            'username' => 'required|min:5|max:16|unique:users',
             'password' => 'required|min:8|max:32',
             'name' => 'required|min:3|max:16',
             'family' => 'required|min:3|max:24'
