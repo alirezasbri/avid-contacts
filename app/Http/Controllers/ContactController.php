@@ -75,7 +75,7 @@ class ContactController extends Controller
         }
 
 
-        $result = ["url" => route('contact.index', session('userId'))];
+        $result = ["url" => route('contact.index')];
         return $result;
     }
 
@@ -160,7 +160,7 @@ class ContactController extends Controller
         } else {
             $contact->image()->delete();
         }
-        $result = ["url" => route('contact.index', $contact->user_id)];
+        $result = ["url" => route('contact.index')];
         return $result;
 
     }
