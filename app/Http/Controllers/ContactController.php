@@ -41,8 +41,10 @@ class ContactController extends Controller
         $this->validate(request(), [
             'name' => 'required|min:3|max:16',
             'family' => 'required|min:3|max:24',
-            'emails' => ' required',
-            'phones' => 'required'
+            'emails' => 'required|array|min:1',
+            'emails.*' => 'email:rfc',
+            'phones' => 'required|array|min:1',
+            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/']
         ]);
 
         if (\request('checkBox') == 'true')

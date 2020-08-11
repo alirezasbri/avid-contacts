@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3863e33-76eb-4dc6-aa46-7ac528d08a39" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ImageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ImageController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ContactController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ContactController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/contact/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/contact/add.blade.php" afterDir="false" />
     </list>
     <list id="7476a2b9-1bf0-4e09-9085-370f9871432c" name="adding images migration - upload image" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -211,7 +213,7 @@
       <workItem from="1596684877767" duration="19537000" />
       <workItem from="1596944035526" duration="3919000" />
       <workItem from="1597030508353" duration="23655000" />
-      <workItem from="1597116553921" duration="5454000" />
+      <workItem from="1597116553921" duration="11127000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <created>1596453099074</created>
