@@ -42,7 +42,7 @@ class ContactController extends Controller
             'name' => 'required|min:3|max:16',
             'family' => 'required|min:3|max:24',
             'emails' => 'required|array|min:1',
-            'emails.*' => 'email:rfc',
+            'emails.*' => 'email:rfc,dns',
             'phones' => 'required|array|min:1',
             'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/']
         ]);
@@ -108,6 +108,10 @@ class ContactController extends Controller
         $this->validate(request(), [
             'name' => 'required|min:3|max:16',
             'family' => 'required|min:3|max:24',
+            'emails' => 'array|min:1',
+            'emails.*' => 'email:rfc,dns',
+            'phones' => 'array|min:1',
+            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/']
         ]);
 
         if ($phoneNumbers->isEmpty()) {
