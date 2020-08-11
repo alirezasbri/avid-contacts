@@ -40,7 +40,7 @@ Route::name('user.login')->post('/login', 'UserController@login');
 Route::name('user.register')->post('/register', 'UserController@register');
 
 //Contact Routes
-Route::name('contact.index')->get('/contacts', 'ContactController@index');
+Route::name('contact.index')->get('/contact', 'ContactController@index');
 Route::name('contact.details')->get('/contact/{contactSlug}', 'ContactController@showContact');
 Route::name('contact.create')->get('/contact/create', 'ContactController@createContact');
 Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@updateContact');
