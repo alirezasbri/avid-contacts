@@ -20,12 +20,6 @@ class ContactController extends Controller
 
     }
 
-    function show(Contact $contact)
-    {
-//        return view('show_contact', ['contact' => Contact::find($id)]);
-        return view('contact.show_contact', ['contact' => $contact]); //implicit bindings - id
-    }
-
     function showContact($slug)
     {
         $isExistSlug = Contact::isExistSlug($slug);
@@ -40,7 +34,6 @@ class ContactController extends Controller
 //        return dd($editable, $id, $contact);
         return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
     }
-
 
     function addContact()
     {
