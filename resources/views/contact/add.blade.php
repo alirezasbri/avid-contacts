@@ -42,9 +42,7 @@
 
     <button style="margin-top: 5px " onclick="savePhonesAndEmails()" class="btn btn-primary">ثبت نهایی</button>
 
-    {{--</form>--}}
     <hr>
-    {{--<button class="btn btn-primary" onclick="savePhonesAndEmails()">ثبت شماره و ایمیل</button>--}}
 
     <div class="form-group">
         <label for="phone">Phone Number</label>
@@ -99,7 +97,6 @@
 </body>
 
 <script type="text/javascript">
-    // e.preventDefault();
 
     function addPhone() {
 

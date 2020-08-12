@@ -10,11 +10,6 @@
     <!-- Bootstrap core CSS -->
     <link href={{ asset("bootstrap/css/bootstrap.css") }} rel="stylesheet"/>
 
-    {{--    <!-- Custom styles for this template -->--}}
-    {{--    <link href = {{ asset("bootstrap/css/sticky-footer-navbar.css") }} rel="stylesheet" />--}}
-
-    {{--    <!-- Optional theme -->--}}
-    {{--    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-theme.min.css') }}">--}}
 </head>
 <body style="margin: 20px">
 <h1>Register Form</h1>

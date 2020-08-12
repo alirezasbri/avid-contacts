@@ -20,7 +20,6 @@ class UserController extends Controller
             return view('user.login', ['error' => 'نام کاربری یا کلمه عبور اشتباه است']);
         }
 
-//        dd(User::isExist($username, $password));
     }
 
     function logout()

@@ -12,7 +12,6 @@ class ContactController extends Controller
     function index()
     {
         if (session('isLogin', false)) {
-//            dd(session('userId')->getId());
             $contacts = \App\Contact::where('user_id', session('userId'))->get();
             $publicContacts = Contact::where('type', 'public')->orWhere('type', 'shared')->get();
             return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => session('userId')]);

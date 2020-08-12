@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{--    <title>Laravel Ajax Image Upload Using Intervention Package Example - Tutsmake.com</title>--}}
-    {{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"/>--}}
-    {{--    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>--}}
+
     @include('layouts.bootstrap')
     <style>
         .avatar-pic {
@@ -85,8 +83,6 @@
                 success: function (data) {
 
                     $('#original').attr('src', 'public/image/' + data.photo_name);
-
-                    // $('#thumbImg').attr('src', 'public/thumbnail/' + data.photo_name);
 
                 },
 

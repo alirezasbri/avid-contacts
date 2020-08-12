@@ -11,8 +11,6 @@ class Contact extends Model
     protected $guarded = [];
     use Sluggable;
 
-//    public $timestamps = false;
-
     public function scopeGetContactByID($query, $id)
     {
         return $query->where('id', $id)->first();
@@ -25,17 +23,12 @@ class Contact extends Model
 
     public static function insertContact($userId, $name, $family, $type)
     {
-//        $type = 'private';
-        if (User::isUserAdmin($userId))
-            $type = 'public';
-
         return Contact::create([
             'user_id' => $userId,
             'name' => $name,
             'family' => $family,
-            'type' => $type
+            'type' => User::isUserAdmin($userId) ? 'public' : 'private'
         ])->id;
-
     }
 
     public static function isContactEditable($userId, $contactUserId)

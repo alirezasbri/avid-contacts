@@ -14,12 +14,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-//    protected $fillable = [
-//        'name', 'email', 'password',
-//    ];
 
     protected $guarded = [];
-//    public $timestamps = false;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -41,15 +37,12 @@ class User extends Authenticatable
 
     public static function isExistUser($username, $password)
     {
-
         if (User::where('username', $username)->exists()) {
             if (User::where('username', $username)->first()->password == $password)
                 return true;
         } else {
             return false;
         }
-
-
     }
 
     public function scopeIsExist($query, $username, $password)
