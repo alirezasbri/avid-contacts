@@ -11,12 +11,14 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => Str::random(10),
-            'family' => Str::random(10),
-            'username' => Str::random(8),
-            'password' => Hash::make('password'),
-            'type' => 'admin'
-        ]);
+
+        factory(\App\User::class, 1)->create();
+//        DB::table('users')->insert([
+//            'name' => Str::random(10),
+//            'family' => Str::random(10),
+//            'username' => Str::random(8),
+//            'password' => Hash::make('password'),
+//            'type' => 'admin'
+//        ]);
     }
 }
