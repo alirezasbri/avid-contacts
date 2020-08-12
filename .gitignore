@@ -4,8 +4,7 @@
 /public/public/image
 /storage/*.key
 /vendor
-.idea
-.idea/workspace.xml
+/.idea
 .editorconfig
 .env
 .env.backup
