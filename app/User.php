@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -15,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -45,10 +46,12 @@ class User extends Authenticatable
         }
     }
 
-    public function scopeIsExist($query, $username, $password)
+    public static function isExist($username, $password)
     {
-        return $query->where('username', $username)->
-        where('password', $password)->exists();
+        if (Hash::check($password, User::where('username', $username)->first()->password))
+            return true;
+        else
+            return false;
     }
 
     public function scopeGetUserID($query, $username)
@@ -65,7 +68,7 @@ class User extends Authenticatable
     {
         User::create([
             'username' => $userName,
-            'password' => $password,
+            'password' => bcrypt($password),
             'name' => $name,
             'family' => $family,
             'type' => 'regular'
