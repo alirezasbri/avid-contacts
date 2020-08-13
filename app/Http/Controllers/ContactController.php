@@ -10,15 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     function index()
     {
-        if (Auth::check()) {
-            $contacts = \App\Contact::where('user_id', session('userId'))->get();
-            $publicContacts = Contact::where('type', 'public')->orWhere('type', 'shared')->get();
-            return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => session('userId')]);
-        }
-        return redirect()->route('login');
-
+        $contacts = \App\Contact::where('user_id', session('userId'))->get();
+        $publicContacts = Contact::where('type', 'public')->orWhere('type', 'shared')->get();
+        return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => session('userId')]);
     }
 
     function showContact($slug)
@@ -32,7 +35,6 @@ class ContactController extends Controller
         $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
         $emails = Email::getContactEmails($contact->id);
         $editable = Contact::isContactEditable(session('userId'), $contact->user_id);
-//        return dd($editable, $id, $contact);
         return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
     }
 
