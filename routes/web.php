@@ -3,6 +3,7 @@
 use App\Contact;
 use App\Email;
 use App\PhoneNumber;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,28 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Auth::routes();
+
+
 Route::get('/', function () {
-    if (session('isLogin', false))
+    if (Auth::check())
         return redirect()->route('contact.index');
     else
-        return redirect()->route('user.login.form');
+        return redirect()->route('login');
 });
-
-//User Routes
-Route::name('user.login.form')->get('/login', function () {
-    if (session('isLogin', false))
-        return redirect()->route('contact.index');
-    else
-        return view('user.login');
-});
-Route::name('user.register.form')->get('/register', function () {
-    return view('user.register');
-});
-Route::name('user.logout')->get('/logout', 'UserController@logout');
-
-
-Route::name('user.login')->post('/login', 'UserController@login');
-Route::name('user.register')->post('/register', 'UserController@register');
 
 //Contact Routes
 Route::name('contact.index')->get('/contact', 'ContactController@index');
@@ -60,3 +49,4 @@ Route::name('phoneNumber.add')->post('/contact/phonenumber/add/{id}', 'PhoneNumb
 
 //Image Routes
 Route::name('image.save')->post('/save', 'ImageController@save');
+

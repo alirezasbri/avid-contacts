@@ -1,29 +1,29 @@
-<!DOCTYPE html>
-<html dir="rtl" lang="fa">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-    <title>Contacts</title>
-@include('layouts.bootstrap')
-<!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+@section('content')
+{{--    <!DOCTYPE html>--}}
+{{--<html dir="rtl" lang="fa">--}}
+{{--<head>--}}
+{{--    <meta charset="utf-8">--}}
+{{--    <meta name="viewport" content="width=device-width, initial-scale=1">--}}
 
-    <style>
-        .avatar-pic {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-    </style>
+{{--    <title>Contacts</title>--}}
+{{--@include('layouts.bootstrap')--}}
+{{--<!-- Fonts -->--}}
+{{--    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">--}}
 
-</head>
-<body>
-<a href="{{route('contact.add.form')}}">
-    <button class="btn btn-danger" style="margin: 5px">اضافه کردن مخاطب</button>
-</a>
-<a href="{{route('user.logout')}}">
-    <button class="btn btn-light" style="margin: 5px">خروج</button>
+{{--    <style>--}}
+{{--        .avatar-pic {--}}
+{{--            width: 50px;--}}
+{{--            height: 50px;--}}
+{{--            border-radius: 50%;--}}
+{{--        }--}}
+{{--    </style>--}}
+
+{{--</head>--}}
+{{--<body>--}}
+<a href="{{route('contact.add.form')}}" style="text-align: right">
+    <button class="btn btn-danger" style="margin: 5px; text-align: right">اضافه کردن مخاطب</button>
 </a>
 
 <hr>
@@ -96,7 +96,7 @@
 
     </table>
 </div>
-</body>
+{{--</body>--}}
 
 <script type="text/javascript">
 
@@ -118,3 +118,4 @@
 </script>
 
 </html>
+@endsection
