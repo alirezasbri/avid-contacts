@@ -85,11 +85,6 @@ class ContactController extends Controller
             $contact->image()->save($image);
         }
 
-//        if (request()->has('photo_name') && request('photo_name') != '') {
-//        }
-
-
-//        $result = ["url" => route('contact.index')];
         return redirect()->route('contact.index');
     }
 
@@ -126,12 +121,15 @@ class ContactController extends Controller
             'emails' => 'array|min:1',
             'emails.*' => 'email:rfc,dns',
             'phones' => 'array|min:1',
-            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/']
+            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
+            'types' => 'array|min:1',
+            'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($phoneNumbers->isEmpty()) {
             $this->validate(request(), [
                 'phones' => 'required',
+                'types' => 'required',
             ]);
         }
 
@@ -170,19 +168,20 @@ class ContactController extends Controller
             }
         }
 
-        if (request()->has('image') && request('image') != '') {
+        if ($files = \request()->file('photo_name')) {
+            $destinationPath = 'public/image/'; // upload path
+            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profileImage);
+
+            $image = new Image(['image' => $profileImage]);
             $contact = Contact::find($contact->id);
-            if (!is_null($contact->image))
-                $contact->image()->update(['image' => \request('image')]);
-            else {
-                $image = new Image(['image' => \request('image')]);
-                $contact->image()->save($image);
-            }
+            $contact->image()->save($image);
         } else {
-            $contact->image()->delete();
+            if ($contact->has('image'))
+                $contact->image()->delete();
         }
-        $result = ["url" => route('contact.index')];
-        return $result;
+
+        return redirect()->route('contact.details', $contact->slug);
 
     }
 
