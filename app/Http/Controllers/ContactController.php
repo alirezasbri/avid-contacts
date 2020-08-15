@@ -175,7 +175,11 @@ class ContactController extends Controller
 
             $image = new Image(['image' => $profileImage]);
             $contact = Contact::find($contact->id);
-            $contact->image()->save($image);
+            if ($contact->has('image')) {
+                $contact->image()->delete();
+                $contact->image()->save($image);
+            } else
+                $contact->image()->save($image);
         } else {
             if ($contact->has('image'))
                 $contact->image()->delete();
