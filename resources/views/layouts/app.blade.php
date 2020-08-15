@@ -25,6 +25,12 @@
                 height: 50px;
                 border-radius: 50%;
             }
+
+            .edit-contact-avatar-pic{
+                width: 150px;
+                height: 150px;
+                border-radius: 10%;
+            }
         </style>
 
     @include('layouts.bootstrap')

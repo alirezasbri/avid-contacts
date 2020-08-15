@@ -1,136 +1,126 @@
-<!DOCTYPE html>
-<html dir="rtl" lang="fa">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+@extends('layouts.app')
 
-    <title>Edit Contact</title>
+@section('content')
 
-    @include('layouts.bootstrap')
+    <div style="margin: 30px" class="col-md-5">
+        <h1 style="text-align: right">فرم اصلاح مخاطب</h1>
+        @include('layouts.errors')
+        <form action="{{ route('contact.edit',$contact->id) }}" method="post" enctype="multipart/form-data">
 
-    <style>
-        .avatar-pic {
-            width: 300px;
-        }
-    </style>
-</head>
-<body style="margin: 30px" class="col-md-5">
+            {{csrf_field()}}
+            <div style="text-align: right">
 
-<h1 style="text-align: right">فرم اصلاح مخاطب</h1>
-@include('layouts.errors')
-<form action="{{ route('contact.edit',$contact->id) }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Name"
+                           value="{{$contact->name}}">
+                </div>
+                <div class="form-group">
+                    <label for="family">Family</label>
+                    <input type="text" name="family" class="form-control" id="family" placeholder="Family"
+                           value="{{$contact->family}}">
+                </div>
+                <div class="form-check">
+                    @if($contact->type == 'shared')
+                        <input id="checkbox" class="form-check-input" type="checkbox" value="" checked>
+                    @else
+                        <input id="checkbox" class="form-check-input" type="checkbox" value="">
+                    @endif
+                    <label class="form-check-label" for="defaultCheck1">
+                        به اشتراک گذاشتن
+                    </label>
+                </div>
 
-    {{csrf_field()}}
-    <div style="text-align: right">
+                <button type="submit" style="margin-top: 5px " class="btn btn-primary">ثبت
+                    نهایی
+                </button>
 
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{$contact->name}}">
-        </div>
-        <div class="form-group">
-            <label for="family">Family</label>
-            <input type="text" name="family" class="form-control" id="family" placeholder="Family"
-                   value="{{$contact->family}}">
-        </div>
-        <div class="form-check">
-            @if($contact->type == 'shared')
-                <input id="checkbox" class="form-check-input" type="checkbox" value="" checked>
-            @else
-                <input id="checkbox" class="form-check-input" type="checkbox" value="">
-            @endif
-            <label class="form-check-label" for="defaultCheck1">
-                به اشتراک گذاشتن
-            </label>
-        </div>
+                <hr>
 
-        <button type="submit" style="margin-top: 5px " class="btn btn-primary">ثبت
-            نهایی
-        </button>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
 
-        <hr>
+                    <label for="type">نوع شماره:</label>
+                    <select name="type" id="type">
+                        <option value="mobile">موبایل</option>
+                        <option value="phone">ثابت</option>
+                    </select>
+                    <button type="button" style="margin-top: 5px " id="phoneBtn" class="btn btn-danger"
+                            onclick="addPhone()">ثبت
+                        شماره
+                    </button>
+                </div>
+                <div id="divPhone"></div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
+                    <button type="button" style="margin-top: 5px " id="emailBtn" class="btn btn-danger"
+                            onclick="addEmail()">ثبت
+                        ایمیل
+                    </button>
+                </div>
+                <div id="divEmail"></div>
 
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+                <table class="table">
+                    @foreach($phoneNumbers as $pn)
+                        <tr>
+                            <td>{{$pn->phone_number}}
+                            </td>
+                            @switch($pn->type)
+                                @case('mobile')
+                                <td>موبایل</td>
+                                @break
 
-            <label for="type">نوع شماره:</label>
-            <select name="type" id="type">
-                <option value="mobile">موبایل</option>
-                <option value="phone">ثابت</option>
-            </select>
-            <button type="button" style="margin-top: 5px " id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت
-                شماره
-            </button>
-        </div>
-        <div id="divPhone"></div>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
-            <button type="button" style="margin-top: 5px " id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت
-                ایمیل
-            </button>
-        </div>
-        <div id="divEmail"></div>
+                                @case('phone')
+                                <td>ثابت</td>
+                                @break
+                            @endswitch
 
-        <table class="table">
-            @foreach($phoneNumbers as $pn)
-                <tr>
-                    <td>{{$pn->phone_number}}
-                    </td>
-                    @switch($pn->type)
-                        @case('mobile')
-                        <td>موبایل</td>
-                        @break
+                            <td>
+                                <button id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
 
-                        @case('phone')
-                        <td>ثابت</td>
-                        @break
-                    @endswitch
+                <table class="table">
+                    @foreach($emails as $email)
+                        <tr>
+                            <td>{{$email->email_address}}
+                            </td>
 
-                    <td>
-                        <button id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+                            <td>
+                                <button id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
 
-        <table class="table">
-            @foreach($emails as $email)
-                <tr>
-                    <td>{{$email->email_address}}
-                    </td>
+                <h3>عکس پروفایل</h3>
+                @php
+                    $value = isset($contact->image) ? $contact->image->image : null;
+                @endphp
+                @isset($value)
 
-                    <td>
-                        <button id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+                    <img id="original" src="{{'/public/image/'. $value  }}"
+                         class="z-depth-1-half edit-contact-avatar-pic"
+                         alt="{{$value}}">
+                    <button type="button" id="delImage" onclick="deleteImage()">حذف</button>
+                    <input type="file" name="photo_name" id="photo_name" style="display: none">
 
-        <h3>عکس پروفایل</h3>
-        @php
-            $value = isset($contact->image) ? $contact->image->image : null;
-        @endphp
-        @isset($value)
+                @else
+{{--                    <img id="original" src="" class="z-depth-1-half edit-contact-avatar-pic" alt="">--}}
+                    <input type="file" name="photo_name" id="photo_name">
+                @endif
 
-            <img id="original" src="{{'/public/image/'. $value  }}"
-                 class="z-depth-1-half avatar-pic"
-                 alt="{{$value}}">
-            <button type="button" id="delImage" onclick="deleteImage()">حذف</button>
-
-        @else
-            <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
-        @endif
-
-        <input type="file" name="photo_name" id="photo_name">
-        <br>
+                <br>
 
 
+            </div>
+        </form>
     </div>
-</form>
-
+@endsection
 <script type="text/javascript">
 
     function deleteFunc(pnId) {
@@ -162,7 +152,9 @@
     function deleteImage() {
         document.getElementById("original").src = "";
         document.getElementById("original").alt = "";
+        document.getElementById("original").style.display = "none";
         document.getElementById("delImage").style.display = "none";
+        document.getElementById("photo_name").style.display = "inline";
     }
 
 
@@ -219,5 +211,4 @@
 
 </script>
 
-</body>
 

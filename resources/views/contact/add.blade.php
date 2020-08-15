@@ -1,83 +1,73 @@
-<!DOCTYPE html>
-<html dir="rtl" lang="fa">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+@extends('layouts.app')
 
-    <title>اضافه کردن مخاطب</title>
+@section('content')
 
-    @include('layouts.bootstrap')
-    <style>
-        .avatar-pic {
-            width: 300px;
-        }
-    </style>
+    <div style="margin: 30px" class="col-md-5">
+        <h1 style="text-align: right">فرم اضافه کردن مخاطب</h1>
+        @include('layouts.errors')
 
-</head>
-<body style="margin: 30px" class="col-md-5">
-<h1 style="text-align: right">فرم اضافه کردن مخاطب</h1>
-@include('layouts.errors')
+        <form action="{{ route('contact.add') }}" method="post" enctype="multipart/form-data">
 
-<form action="{{ route('contact.add') }}" method="post" enctype="multipart/form-data">
+            {{csrf_field()}}
+            <div style="text-align: right">
 
-    {{csrf_field()}}
-    <div style="text-align: right">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="family">Family</label>
+                    <input type="text" name="family" class="form-control" id="family" placeholder="Family">
+                </div>
+                <div class="form-check">
+                    <input id="checkbox" class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="defaultCheck1">
+                        به اشتراک گذاشتن
+                    </label>
+                </div>
 
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Name">
-        </div>
-        <div class="form-group">
-            <label for="family">Family</label>
-            <input type="text" name="family" class="form-control" id="family" placeholder="Family">
-        </div>
-        <div class="form-check">
-            <input id="checkbox" class="form-check-input" type="checkbox" value="">
-            <label class="form-check-label" for="defaultCheck1">
-                به اشتراک گذاشتن
-            </label>
-        </div>
+                <button type="submit" style="margin-top: 5px " class="btn btn-primary">ثبت
+                    نهایی
+                </button>
 
-        <button type="submit" style="margin-top: 5px " class="btn btn-primary">ثبت
-            نهایی
-        </button>
+                <hr>
 
-        <hr>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
 
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" name="phone" class="form-control" id="phone" placeholder="Phone Number">
+                    <label for="type">نوع شماره:</label>
+                    <select name="type" id="type">
+                        <option value="mobile">موبایل</option>
+                        <option value="phone">ثابت</option>
+                    </select>
+                    <button type="button" style="margin-top: 5px " id="phoneBtn" class="btn btn-danger"
+                            onclick="addPhone()">ثبت
+                        شماره
+                    </button>
+                </div>
+                <div id="divPhone"></div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
+                    <button type="button" style="margin-top: 5px " id="emailBtn" class="btn btn-danger"
+                            onclick="addEmail()">ثبت
+                        ایمیل
+                    </button>
+                </div>
+                <div id="divEmail"></div>
 
-            <label for="type">نوع شماره:</label>
-            <select name="type" id="type">
-                <option value="mobile">موبایل</option>
-                <option value="phone">ثابت</option>
-            </select>
-            <button type="button" style="margin-top: 5px " id="phoneBtn" class="btn btn-danger" onclick="addPhone()">ثبت
-                شماره
-            </button>
-        </div>
-        <div id="divPhone"></div>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="text" name="email" class="form-control" id="email" placeholder="Email Address">
-            <button type="button" style="margin-top: 5px " id="emailBtn" class="btn btn-danger" onclick="addEmail()">ثبت
-                ایمیل
-            </button>
-        </div>
-        <div id="divEmail"></div>
-
-        <h3>اضافه کردن عکس پروفایل</h3>
-        <input type="file" name="photo_name" id="photo_name">
-        <br>
+                <h3>اضافه کردن عکس پروفایل</h3>
+                <input type="file" name="photo_name" id="photo_name">
+                <br>
 
 
+            </div>
+        </form>
     </div>
-</form>
 
-</body>
+
+@endsection
 
 <script type="text/javascript">
 
