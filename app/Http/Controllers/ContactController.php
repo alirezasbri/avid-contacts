@@ -54,7 +54,7 @@ class ContactController extends Controller
             $type = "shared";
         else $type = "private";
 
-        $contactId = Contact::insertContact(Auth::id(), \request('name'), \request('family'),$type);
+        $contactId = Contact::insertContact(Auth::id(), \request('name'), \request('family'), $type);
 
         if (request()->has('phones') && request()->has('types')) {
             $phones = array_values(request('phones'));
@@ -91,6 +91,9 @@ class ContactController extends Controller
         if (!$isExistSlug)
             abort(404);
         $contact = Contact::getContactBySlug($slug);
+
+        if (Auth::id() !== $contact->user_id)
+            abort(403);
         $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
         $emails = Email::getContactEmails($contact->id);
 
