@@ -19,6 +19,14 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+        <style>
+            .avatar-pic {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+            }
+        </style>
+
     @include('layouts.bootstrap')
 </head>
 <body>

@@ -31,7 +31,7 @@ Route::get('/', function () {
 //Contact Routes
 Route::name('contact.index')->get('/contact', 'ContactController@index');
 Route::name('contact.add.form')->get('/contact/add', function () {
-    return view('contact.add', ['userId' => session('userId')]);
+    return view('contact.add', ['userId' => Auth::id()]);
 });
 Route::name('contact.details')->get('/contact/{contactSlug}', 'ContactController@showContact');
 Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@updateContact');

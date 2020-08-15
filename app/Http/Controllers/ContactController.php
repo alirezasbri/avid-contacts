@@ -19,9 +19,9 @@ class ContactController extends Controller
 
     function index()
     {
-        $contacts = \App\Contact::where('user_id', session('userId'))->get();
+        $contacts = \App\Contact::where('user_id', Auth::id())->get();
         $publicContacts = Contact::where('type', 'public')->orWhere('type', 'shared')->get();
-        return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => session('userId')]);
+        return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => Auth::id()]);
     }
 
     function showContact($slug)
@@ -34,7 +34,7 @@ class ContactController extends Controller
         $contact = Contact::getContactBySlug($slug);
         $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
         $emails = Email::getContactEmails($contact->id);
-        $editable = Contact::isContactEditable(session('userId'), $contact->user_id);
+        $editable = Contact::isContactEditable(Auth::id(), $contact->user_id);
         return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
     }
 
@@ -54,7 +54,7 @@ class ContactController extends Controller
             $type = "shared";
         else $type = "private";
 
-        $contactId = Contact::insertContact(session('userId'), \request('name'), \request('family'), $type);
+        $contactId = Contact::insertContact(Auth::id(), \request('name'), \request('family'),$type);
 
         if (request()->has('phones') && request()->has('types')) {
             $phones = array_values(request('phones'));

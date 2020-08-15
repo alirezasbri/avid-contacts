@@ -77,12 +77,7 @@ class User extends Authenticatable
 
     public static function isUserAdmin($userId)
     {
-        $userType = User::find($userId)->type;
-
-        if ($userType == 'admin')
-            return true;
-        else
-            return false;
+        User::find($userId)->type == 'admin' ? true : false;
     }
 
     //Relationships

@@ -27,7 +27,7 @@ class Contact extends Model
             'user_id' => $userId,
             'name' => $name,
             'family' => $family,
-            'type' => User::isUserAdmin($userId) ? 'public' : 'private'
+            'type' => User::isUserAdmin($userId) ? 'public' : $type
         ])->id;
     }
 
