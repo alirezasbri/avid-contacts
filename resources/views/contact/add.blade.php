@@ -18,11 +18,6 @@
 </head>
 <body style="margin: 30px" class="col-md-5">
 <h1 style="text-align: right">فرم اضافه کردن مخاطب</h1>
-
-{{--<div id="div" class="alert alert-danger" style="display: none">--}}
-
-{{--</div>--}}
-
 @include('layouts.errors')
 
 <form action="{{ route('contact.add') }}" method="post" enctype="multipart/form-data">
@@ -77,35 +72,6 @@
         <h3>اضافه کردن عکس پروفایل</h3>
         <input type="file" name="photo_name" id="photo_name">
         <br>
-
-        {{--
-
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <form id="imageUploadForm" action="javascript:void(0)" enctype="multipart/form-data">
-                    <div class="file-field">
-                        <div class="row">
-                            <div class=" col-md-8 mb-4">
-                                <img id="original" src="" class="z-depth-1-half avatar-pic" alt="">
-                                <div class="d-flex justify-content-center mt-3">
-                                    <div class="btn btn-mdb-color btn-rounded float-left">
-                                        <input type="file" name="photo_name" id="photo_name" required=""> <br>
-                                        <button type="submit" class="btn btn-danger d-flex justify-content-center mt-3">
-                                            ثبت عکس
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class=" col-md-4 mb-4">
-                                <img id="thumbImg" src="" class=" z-depth-1-half thumb-pic"
-                                     alt="">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        --}}
 
 
     </div>
@@ -241,42 +207,5 @@
         });
 
     }
-
-    //Upload Image Ajax
-    $(document).ready(function (e) {
-
-        $('#imageUploadForm').on('submit', (function (e) {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            e.preventDefault();
-
-            let formData = new FormData(this);
-
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('image.save')}}",
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    $('#original').attr('src', '/public/image/' + data.photo_name);
-                    $('#original').attr('alt', data.photo_name);
-                },
-
-                error: function (data) {
-                    console.log(data);
-                }
-
-            });
-
-
-        }));
-
-    });
 
 </script>
