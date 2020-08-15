@@ -47,8 +47,11 @@ class ContactController extends Controller
             'emails' => 'required|array|min:1',
             'emails.*' => 'email:rfc,dns',
             'phones' => 'required|array|min:1',
-            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/']
+            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
+            'types' => 'required|array|min:1',
+            'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
 
         if (\request('checkBox') == 'true')
             $type = "shared";
@@ -72,16 +75,22 @@ class ContactController extends Controller
             }
         }
 
+        if ($files = \request()->file('photo_name')) {
+            $destinationPath = 'public/image/'; // upload path
+            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profileImage);
 
-        if (request()->has('image') && request('image') != '') {
-            $image = new Image(['image' => \request('image')]);
+            $image = new Image(['image' => $profileImage]);
             $contact = Contact::find($contactId);
             $contact->image()->save($image);
         }
 
+//        if (request()->has('photo_name') && request('photo_name') != '') {
+//        }
 
-        $result = ["url" => route('contact.index')];
-        return $result;
+
+//        $result = ["url" => route('contact.index')];
+        return redirect()->route('contact.index');
     }
 
     function editFormContact($slug)
