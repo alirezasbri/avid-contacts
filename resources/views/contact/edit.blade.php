@@ -78,7 +78,7 @@
                             @endswitch
 
                             <td>
-                                <button id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
+                                <button type="button" id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
                             </td>
                         </tr>
                     @endforeach
@@ -91,7 +91,7 @@
                             </td>
 
                             <td>
-                                <button id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
+                                <button type="button" id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
                             </td>
                         </tr>
                     @endforeach
@@ -110,7 +110,7 @@
                     <input type="file" name="photo_name" id="photo_name" style="display: none">
 
                 @else
-{{--                    <img id="original" src="" class="z-depth-1-half edit-contact-avatar-pic" alt="">--}}
+                    {{--                    <img id="original" src="" class="z-depth-1-half edit-contact-avatar-pic" alt="">--}}
                     <input type="file" name="photo_name" id="photo_name">
                 @endif
 
