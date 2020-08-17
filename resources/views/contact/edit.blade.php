@@ -22,11 +22,11 @@
                 </div>
                 <div class="form-check">
                     @if($contact->type == 'shared')
-                        <input id="checkbox" class="form-check-input" type="checkbox" value="" checked>
+                        <input name="checkBox" id="checkbox" class="form-check-input" type="checkbox" checked>
                     @else
-                        <input id="checkbox" class="form-check-input" type="checkbox" value="">
+                        <input name="checkBox" id="checkbox" class="form-check-input" type="checkbox">
                     @endif
-                    <label class="form-check-label" for="defaultCheck1">
+                    <label class="form-check-label" for="checkbox">
                         به اشتراک گذاشتن
                     </label>
                 </div>

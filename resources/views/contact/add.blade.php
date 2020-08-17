@@ -20,8 +20,8 @@
                     <input type="text" name="family" class="form-control" id="family" placeholder="Family">
                 </div>
                 <div class="form-check">
-                    <input id="checkbox" class="form-check-input" type="checkbox" value="">
-                    <label class="form-check-label" for="defaultCheck1">
+                    <input name="checkBox" id="checkbox" class="form-check-input" type="checkbox">
+                    <label class="form-check-label" for="checkbox">
                         به اشتراک گذاشتن
                     </label>
                 </div>

@@ -52,10 +52,7 @@ class ContactController extends Controller
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-
-        if (\request('checkBox') == 'true')
-            $type = "shared";
-        else $type = "private";
+        $type = \request('checkBox') == 'on' ? 'shared' : 'private';
 
         $contactId = Contact::insertContact(Auth::id(), \request('name'), \request('family'), $type);
 
@@ -126,6 +123,7 @@ class ContactController extends Controller
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+
         if ($phoneNumbers->isEmpty()) {
             $this->validate(request(), [
                 'phones' => 'required',
@@ -141,9 +139,7 @@ class ContactController extends Controller
 
         $contact = Contact::getContactByID($id);
 
-        if (request('checkBox') == 'true')
-            $type = "shared";
-        else $type = "private";
+        $type = \request('checkBox') == 'on' ? 'shared' : 'private';
 
         $contact->update([
             'name' => request('name'),
