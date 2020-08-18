@@ -115,27 +115,27 @@ class ContactController extends Controller
         $this->validate(request(), [
             'name' => 'required|min:3|max:16',
             'family' => 'required|min:3|max:24',
-            'emails' => 'array|min:1',
+            'emails' => 'required|array|min:1',
             'emails.*' => 'email:rfc,dns',
-            'phones' => 'array|min:1',
+            'phones' => 'required|array|min:1',
             'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
-            'types' => 'array|min:1',
+            'types' => 'required|array|min:1',
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
-        if ($phoneNumbers->isEmpty()) {
-            $this->validate(request(), [
-                'phones' => 'required',
-                'types' => 'required',
-            ]);
-        }
-
-        if ($emails->isEmpty()) {
-            $this->validate(request(), [
-                'emails' => 'required',
-            ]);
-        }
+//        if ($phoneNumbers->isEmpty()) {
+//            $this->validate(request(), [
+//                'phones' => 'required',
+//                'types' => 'required',
+//            ]);
+//        }
+//
+//        if ($emails->isEmpty()) {
+//            $this->validate(request(), [
+//                'emails' => 'required',
+//            ]);
+//        }
 
         $contact = Contact::getContactByID($id);
 
@@ -148,6 +148,7 @@ class ContactController extends Controller
         ]);
 
         if (request()->has('phones') && request()->has('types')) {
+            PhoneNumber::where('contact_id', $contact->id)->delete();
             $phones = array_values(request('phones'));
             $types = array_values(request('types'));
             $i = 0;
@@ -158,6 +159,7 @@ class ContactController extends Controller
         }
 
         if (request()->has('emails')) {
+            Email::where('contact_id', $contact->id)->delete();
             $emails = array_values(request('emails'));
             foreach ($emails as $email) {
                 Email::insertEmail($contact->id, $email);

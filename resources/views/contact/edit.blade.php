@@ -65,20 +65,37 @@
                 <table class="table">
                     @foreach($phoneNumbers as $pn)
                         <tr>
-                            <td>{{$pn->phone_number}}
+                            <td id="phonetd">
+                                <input id="phone" name="phones[]" type="text" value="{{$pn->phone_number}}">
                             </td>
                             @switch($pn->type)
                                 @case('mobile')
-                                <td>موبایل</td>
+
+                                <td id="typetd">
+                                    <select name="types[]" id="type">
+                                        <option value="mobile" selected>موبایل</option>
+                                        <option value="phone">ثابت</option>
+                                    </select>
+                                </td>
+
+                                {{--                                <td id="typetd"><input id="type" name="types[]" type="text" value="{{$pn->type}}"--}}
+                                {{--                                                       readonly></td>--}}
                                 @break
 
                                 @case('phone')
-                                <td>ثابت</td>
+                                <td id="typetd">
+                                    <select name="types[]" id="type">
+                                        <option value="mobile">موبایل</option>
+                                        <option value="phone" selected>ثابت</option>
+                                    </select>
+                                </td>
+                                {{--                                <td id="typetd"><input id="type" name="types[]" type="text" value="{{$pn->type}}"--}}
+                                {{--                                                       readonly></td>--}}
                                 @break
                             @endswitch
 
                             <td>
-                                <button type="button" id="del" onclick="deleteFunc({{$pn->id}})">حذف</button>
+                                <button type="button" id="del" onclick="deleteFunc(this.parentNode);">حذف</button>
                             </td>
                         </tr>
                     @endforeach
@@ -87,11 +104,12 @@
                 <table class="table">
                     @foreach($emails as $email)
                         <tr>
-                            <td>{{$email->email_address}}
+                            <td id="emailtd">
+                                <input id="email" name="emails[]" type="text" value="{{$email->email_address}}">
                             </td>
 
                             <td>
-                                <button type="button" id="del" onclick="deleteFuncEmail({{$email->id}})">حذف</button>
+                                <button type="button" id="del" onclick="deleteFuncEmail(this.parentNode)">حذف</button>
                             </td>
                         </tr>
                     @endforeach
@@ -123,31 +141,41 @@
 @endsection
 <script type="text/javascript">
 
-    function deleteFunc(pnId) {
-        let url = "/phonenumber/delete/" + pnId;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (res) {
-                location.reload();
-            },
-            fail: function (xhr, textStatus, errorThrown) {
-            }
-        });
+    // function deleteFunc(pnId) {
+    //     let url = "/phonenumber/delete/" + pnId;
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         success: function (res) {
+    //             location.reload();
+    //         },
+    //         fail: function (xhr, textStatus, errorThrown) {
+    //         }
+    //     });
+    // }
+
+    function deleteFunc(el) {
+        el.parentNode.querySelector('#phonetd').querySelector('#phone').disabled = true;
+        el.parentNode.querySelector('#typetd').querySelector('#type').disabled = true;
     }
 
-    function deleteFuncEmail(eId) {
-        let url = "/email/delete/" + eId;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (res) {
-                location.reload();
-            },
-            fail: function (xhr, textStatus, errorThrown) {
-            }
-        });
+    function deleteFuncEmail(el) {
+        el.parentNode.querySelector('#emailtd').querySelector('#email').disabled = true;
+        // el.parentNode.querySelector('#typetd').querySelector('#type').disabled = true;
     }
+
+    // function deleteFuncEmail(eId) {
+    //     let url = "/email/delete/" + eId;
+    //     $.ajax({
+    //         url: url,
+    //         type: 'GET',
+    //         success: function (res) {
+    //             location.reload();
+    //         },
+    //         fail: function (xhr, textStatus, errorThrown) {
+    //         }
+    //     });
+    // }
 
     function deleteImage() {
         document.getElementById("original").src = "";
