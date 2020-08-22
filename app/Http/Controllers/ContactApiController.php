@@ -90,9 +90,9 @@ class ContactApiController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        return response()->json(['data' => Contact::findOrFail($id)], 200);
+        return response()->json(['data' => Contact::findOrFail(\request('contactId'))], 200);
     }
 
     /**
