@@ -7,10 +7,15 @@ use App\Email;
 use App\Image;
 use App\PhoneNumber;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ContactApiController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +46,8 @@ class ContactApiController extends Controller
             'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
             'types' => 'required|array|min:1',
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'userId' => 'required|exists:users,id'
+            'userId' => 'required|exists:users,id',
+            'api_token' => 'required'
         ]);
 
         $type = \request('checkBox') == 'on' ? 'shared' : 'private';
@@ -86,9 +92,8 @@ class ContactApiController extends Controller
      */
     public function show($id)
     {
-        return response()->json(['data' => Contact::findOrFail($id), 200]);
+        return response()->json(['data' => Contact::findOrFail($id)], 200);
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -157,19 +162,23 @@ class ContactApiController extends Controller
                 $contact->image()->delete();
         }
 
-        return response()->json(['data' => 'success', 200]);
+        return response()->json(['data' => 'success'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function destroy($id)
+    public function destroy()
     {
-        Contact::destroy($id);
-
-        return response()->json(['data' => 'success', 200]);
+        $this->validate(\request(), [
+            'api_token' => 'required',
+            'id' => 'required'
+        ]);
+        Contact::destroy(\request()->id);
+        return response()->json(['message' => 'success'], 200);
     }
+
 }
