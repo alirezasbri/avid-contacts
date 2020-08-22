@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/contact/delete', 'ContactApiController@destroy');
-Route::get('/contacts/{id}', 'ContactApiController@index');
-Route::get('/contact/{id}', 'ContactApiController@show');
-Route::post('/contact', 'ContactApiController@store');
+Route::post('/contact/index', 'ContactApiController@index');
+Route::post('/contact/show', 'ContactApiController@show');
+Route::post('/contact/store', 'ContactApiController@store');
 Route::put('/contact/{id}', 'ContactApiController@update');
 
 Route::post('/register', 'UserApiController@register');
