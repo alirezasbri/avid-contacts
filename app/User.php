@@ -5,8 +5,10 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -61,18 +63,21 @@ class User extends Authenticatable
 
     public function scopeIsUsernameExist($query, $username)
     {
-        return $query->where('username', $username)->exists();
+        return $query->where('email', $username)->exists();
     }
 
-    public static function createUser($userName, $password, $name, $family)
+    public static function createUser($userName, $password, $name, $family): string
     {
+        $token = Str::random(60);
         User::create([
-            'username' => $userName,
+            'email' => $userName,
             'password' => bcrypt($password),
             'name' => $name,
             'family' => $family,
-            'type' => 'regular'
+            'type' => 'regular',
+            'api_token' => hash('sha256', $token),
         ]);
+        return $token;
     }
 
     public static function isUserAdmin($userId)
@@ -80,10 +85,39 @@ class User extends Authenticatable
         User::find($userId)->type == 'admin' ? true : false;
     }
 
+    public static function refreshToken(string $id): string
+    {
+        $token = Str::random(60);
+        User::where('id', $id)->update(['api_token' => hash('sha256', $token)]);
+        return $token;
+    }
+
     //Relationships
     public function contacts()
     {
         return $this->hasMany('App\Contact');
     }
+
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
 
 }
