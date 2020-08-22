@@ -80,7 +80,7 @@ class ContactApiController extends Controller
             $contact->image()->save($image);
         }
 
-        return response()->json(['data' => 'success', 200]);
+        return response()->json(['data' => 'success'], 200);
 
     }
 
