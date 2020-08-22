@@ -22,9 +22,9 @@ class ContactApiController extends Controller
      * @param int $userId
      * @return \Illuminate\Http\Response
      */
-    public function index(int $userId)
+    public function index()
     {
-        return response()->json(['data' => Contact::where('user_id', $userId)->get()], 200);
+        return response()->json(['data' => Contact::where('user_id', \request('userId'))->get()], 200);
     }
 
 
@@ -103,9 +103,9 @@ class ContactApiController extends Controller
      * @return void
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        $this->validate($request, [
+        $this->validate(\request(), [
             'name' => 'required|min:3|max:16',
             'family' => 'required|min:3|max:24',
             'emails' => 'required|array|min:1',
@@ -177,7 +177,7 @@ class ContactApiController extends Controller
             'api_token' => 'required',
             'id' => 'required'
         ]);
-        Contact::destroy(\request()->id);
+        Contact::destroy(\request('id'));
         return response()->json(['message' => 'success'], 200);
     }
 
