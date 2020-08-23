@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Contact;
 use App\Email;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ContactCollection;
+use App\Http\Resources\Contact as ContactResource;
 use App\Image;
 use App\PhoneNumber;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use App\Http\Resources\Contact as ContactResource;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class ContactController extends Controller
 {
@@ -23,19 +25,19 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return ContactCollection
+     * @return AnonymousResourceCollection
      */
     public function index()
     {
-        return new ContactCollection(Contact::where('user_id', auth()->id())->get());
+        return ContactResource::collection(Contact::where('user_id', auth()->id())->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return void
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -106,10 +108,9 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return void
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function update($id)
     {
@@ -181,7 +182,7 @@ class ContactController extends Controller
      * Remove the specified resource from storage.
      *
      * @param $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
