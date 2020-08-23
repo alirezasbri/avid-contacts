@@ -24,7 +24,7 @@ class ContactApiController extends Controller
      */
     public function index()
     {
-        return response()->json(['data' => Contact::where('user_id', \request('userId'))->get()], 200);
+        return response()->json(['data' => Contact::where('user_id', auth()->id())->get()], 200);
     }
 
 
@@ -46,13 +46,11 @@ class ContactApiController extends Controller
             'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
             'types' => 'required|array|min:1',
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'userId' => 'required|exists:users,id',
-            'api_token' => 'required'
         ]);
 
         $type = \request('checkBox') == 'on' ? 'shared' : 'private';
 
-        $contactId = Contact::insertContact(\request('userId'), \request('name'), \request('family'), $type);
+        $contactId = Contact::insertContact(auth()->id(), \request('name'), \request('family'), $type);
 
         if (request()->has('phones') && request()->has('types')) {
             $phones = array_values(request('phones'));
@@ -80,7 +78,7 @@ class ContactApiController extends Controller
             $contact->image()->save($image);
         }
 
-        return response()->json(['data' => 'success'], 200);
+        return response()->json(['message' => 'success'], 200);
 
     }
 
@@ -90,9 +88,18 @@ class ContactApiController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        return response()->json(['data' => Contact::findOrFail(\request('contactId'))], 200);
+        $contact = Contact::find($id);
+        if (!is_null($contact)) {
+            if ($contact->user_id === auth()->id())
+                return response()->json(['data' => $contact], 200);
+            else
+                return response()->json(['message' => 'unauthorized'], 401);
+        } else {
+            return response()->json(['message' => 'contact not found'], 404);
+        }
+
     }
 
     /**
@@ -116,7 +123,11 @@ class ContactApiController extends Controller
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $contact = Contact::findOrFail($id);
+
+        if (!$contact = Contact::find($id))
+            return response()->json(['message' => 'contact not found'], 404);
+        if (auth()->id() !== $contact->user_id)
+            return response()->json(['message' => 'unauthorized'], 401);
 
         $type = \request('checkBox') == 'on' ? 'shared' : 'private';
 
@@ -168,17 +179,21 @@ class ContactApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param $id
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function destroy()
+    public function destroy($id)
     {
-        $this->validate(\request(), [
-            'api_token' => 'required',
-            'id' => 'required'
-        ]);
-        Contact::destroy(\request('id'));
-        return response()->json(['message' => 'success'], 200);
+        $contact = Contact::find($id);
+        if (!is_null($contact)) {
+            if ($contact->user_id === auth()->id()) {
+                Contact::destroy($id);
+                return response()->json(['message' => 'success'], 200);
+            } else
+                return response()->json(['message' => 'unauthorized'], 401);
+        } else
+            return response()->json(['message' => 'contact not found'], 404);
+
     }
 
 }
