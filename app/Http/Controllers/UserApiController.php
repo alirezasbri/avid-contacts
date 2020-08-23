@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 
 class UserApiController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
 
     function login(Request $request)
     {
@@ -22,7 +18,7 @@ class UserApiController extends Controller
         if (auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json(['token' => User::refreshToken(User::where('email', $request->email)->first()->id)], 200);
         }
-        return \response()->json(['message' => 'Unauthorize'], 401);
+        return \response()->json(['message' => 'unauthorized'], 401);
 
     }
 
