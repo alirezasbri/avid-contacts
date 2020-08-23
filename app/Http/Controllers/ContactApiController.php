@@ -6,6 +6,7 @@ use App\Contact;
 use App\Email;
 use App\Image;
 use App\PhoneNumber;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ContactApiController extends Controller
@@ -26,7 +27,6 @@ class ContactApiController extends Controller
     {
         return response()->json(['data' => Contact::where('user_id', auth()->id())->get()], 200);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -90,16 +90,15 @@ class ContactApiController extends Controller
      */
     public function show($id)
     {
-        $contact = Contact::find($id);
-        if (!is_null($contact)) {
-            if ($contact->user_id === auth()->id())
+        try {
+            $contact = Contact::findOrFail($id);
+            if (!is_null($contact) && $contact->user_id === auth()->id())
                 return response()->json(['data' => $contact], 200);
             else
                 return response()->json(['message' => 'unauthorized'], 401);
-        } else {
-            return response()->json(['message' => 'contact not found'], 404);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'user not found'], 404);
         }
-
     }
 
     /**
@@ -184,16 +183,16 @@ class ContactApiController extends Controller
      */
     public function destroy($id)
     {
-        $contact = Contact::find($id);
-        if (!is_null($contact)) {
-            if ($contact->user_id === auth()->id()) {
+        try {
+            $contact = Contact::findOrFail($id);
+            if (!is_null($contact) && $contact->user_id === auth()->id()) {
                 Contact::destroy($id);
                 return response()->json(['message' => 'success'], 200);
             } else
                 return response()->json(['message' => 'unauthorized'], 401);
-        } else
-            return response()->json(['message' => 'contact not found'], 404);
-
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'user not found'], 404);
+        }
     }
 
 }
