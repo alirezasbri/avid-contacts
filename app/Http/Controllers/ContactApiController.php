@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use App\Email;
+use App\Http\Resources\ContactCollection;
 use App\Image;
 use App\PhoneNumber;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use App\Http\Resources\Contact as ContactResource;
 
 class ContactApiController extends Controller
 {
@@ -20,12 +22,11 @@ class ContactApiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param int $userId
-     * @return \Illuminate\Http\Response
+     * @return ContactCollection
      */
     public function index()
     {
-        return response()->json(['data' => Contact::where('user_id', auth()->id())->get()], 200);
+        return new ContactCollection(Contact::where('user_id', auth()->id())->get());
     }
 
     /**
