@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 
-class UserApiController extends Controller
+class UserController extends Controller
 {
 
     function login(Request $request)

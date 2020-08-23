@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Contact;
 use App\Email;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ContactCollection;
 use App\Image;
 use App\PhoneNumber;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Resources\Contact as ContactResource;
 
-class ContactApiController extends Controller
+class ContactController extends Controller
 {
 
     public function __construct()
