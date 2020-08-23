@@ -87,14 +87,14 @@ class ContactApiController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return ContactResource
      */
     public function show($id)
     {
         try {
             $contact = Contact::findOrFail($id);
             if (!is_null($contact) && $contact->user_id === auth()->id())
-                return response()->json(['data' => $contact], 200);
+                return new ContactResource($contact);
             else
                 return response()->json(['message' => 'unauthorized'], 401);
         } catch (ModelNotFoundException $e) {
