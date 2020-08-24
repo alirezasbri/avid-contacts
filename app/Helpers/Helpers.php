@@ -3,12 +3,25 @@
 use App\Image;
 
 if (!function_exists('storeImage')) {
-    function storeImage($file, $contact)
+    function storeImage($file, $contact): void
     {
-        $destinationPath = 'public/image/'; // upload path
-        $profileImage = date('YmdHis') . "." . $file->getClientOriginalExtension();
-        $file->move($destinationPath, $profileImage);
-        $image = new Image(['image' => $profileImage]);
-        $contact->image()->save($image);
+        $contact->image()->save(new Image(['image' => prepareImage($file)]));
+    }
+}
+
+if (!function_exists('updateImage')) {
+    function updateImage($files, $contact): void
+    {
+        $contact->image()->update(['image' => prepareImage($files)]);
+    }
+
+    if (!function_exists('prepareImage')) {
+        function prepareImage($files): string
+        {
+            $destinationPath = 'public/image/'; // upload path
+            $imageName = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $imageName);
+            return $imageName;
+        }
     }
 }
