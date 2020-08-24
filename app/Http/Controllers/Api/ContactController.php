@@ -8,13 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\Contact as ContactResource;
-use App\Image;
 use App\PhoneNumber;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class ContactController extends Controller
 {
@@ -37,11 +34,10 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreContactRequest $request
      * @return void
-     * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
         $contactId = Contact::insertContact(
             auth()->id(),
@@ -111,23 +107,8 @@ class ContactController extends Controller
         foreach ($request->input('emails') as $email) {
             Email::insertEmail($contact->id, $email);
         }
-
-        if ($files = \request()->file('photo_name')) {
-            $destinationPath = 'public/image/'; // upload path
-            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $profileImage);
-
-            $image = new Image(['image' => $profileImage]);
-
-            if ($contact->has('image')) {
-                $contact->image()->delete();
-                $contact->image()->save($image);
-            } else
-                $contact->image()->save($image);
-        } else {
-            if ($contact->has('image'))
-                $contact->image()->delete();
-        }
+        if ($file = $request->file('photo_name'))
+            updateImage($file, Contact::find($id));
 
         return response()->json(['message' => 'success'], 200);
     }
