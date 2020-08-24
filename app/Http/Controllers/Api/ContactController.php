@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Contact;
 use App\Email;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreContactRequest;
 use App\Http\Resources\Contact as ContactResource;
 use App\Image;
 use App\PhoneNumber;
@@ -39,40 +40,23 @@ class ContactController extends Controller
      * @return void
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|min:3|max:16',
-            'family' => 'required|min:3|max:24',
-            'emails' => 'required|array|min:1',
-            'emails.*' => 'email:rfc,dns',
-            'phones' => 'required|array|min:1',
-            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
-            'types' => 'required|array|min:1',
-            'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $type = $request->input('checkBox') == 'on' ? 'shared' : 'private';
 
-        $type = \request('checkBox') == 'on' ? 'shared' : 'private';
+        $contactId = Contact::insertContact(auth()->id(), $request->input('name'),
+            $request->input('family'), $type);
 
-        $contactId = Contact::insertContact(auth()->id(), \request('name'), \request('family'), $type);
 
-        if (request()->has('phones') && request()->has('types')) {
-            $phones = array_values(request('phones'));
-            $types = array_values(request('types'));
-            $i = 0;
-            foreach ($phones as $pn) {
-                PhoneNumber::insertPhoneNumber($contactId, $pn, $types[$i]);
-                $i++;
-            }
-        }
-        if (request()->has('emails')) {
-            $emails = array_values(request('emails'));
-            foreach ($emails as $email) {
-                Email::insertEmail($contactId, $email);
-            }
+        foreach ($request->input('phones') as $pn) {
+            PhoneNumber::insertPhoneNumber($contactId, $pn['phone'], $pn['type']);
         }
 
-        if ($files = \request()->file('photo_name')) {
+        foreach ($request->input('emails') as $email) {
+            Email::insertEmail($contactId, $email);
+        }
+
+        if ($files = $request->file('photo_name')) {
             $destinationPath = 'public/image/'; // upload path
             $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $profileImage);
@@ -81,9 +65,8 @@ class ContactController extends Controller
             $contact = Contact::find($contactId);
             $contact->image()->save($image);
         }
-
+        
         return response()->json(['message' => 'success'], 200);
-
     }
 
     /**
