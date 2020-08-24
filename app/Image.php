@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    //
     protected $guarded = [];
-//    public $timestamps = false;
 
     public static function insertImage($contactId, $image)
     {
@@ -18,6 +16,7 @@ class Image extends Model
         ])->id;
     }
 
+    //Relationships
     function contact()
     {
         return $this->belongsTo('App\Contact');
