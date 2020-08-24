@@ -58,7 +58,8 @@ class ContactController extends Controller
             Email::insertEmail($contactId, $email);
         }
 
-        storeImage($request->file('photo_name'), Contact::find($contactId));
+        if ($file = $request->file('photo_name'))
+            storeImage($file, Contact::find($contactId));
 
         return response()->json(['message' => 'success'], 201);
     }
