@@ -41,12 +41,13 @@ class ContactController extends Controller
      * @return void
      * @throws ValidationException
      */
-    public function store(StoreContactRequest $request)
+    public function store(Request $request)
     {
-        $type = $request->input('checkBox') == 'on' ? 'shared' : 'private';
-
-        $contactId = Contact::insertContact(auth()->id(), $request->input('name'),
-            $request->input('family'), $type);
+        $contactId = Contact::insertContact(
+            auth()->id(),
+            $request->input('name'),
+            $request->input('family'),
+            $request->input('checkBox') == 'on' ? 'shared' : 'private');
 
 
         foreach ($request->input('phones') as $pn) {
@@ -57,17 +58,9 @@ class ContactController extends Controller
             Email::insertEmail($contactId, $email);
         }
 
-        if ($files = $request->file('photo_name')) {
-            $destinationPath = 'public/image/'; // upload path
-            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $profileImage);
+        storeImage($request->file('photo_name'), Contact::find($contactId));
 
-            $image = new Image(['image' => $profileImage]);
-            $contact = Contact::find($contactId);
-            $contact->image()->save($image);
-        }
-
-        return response()->json(['message' => 'success'], 200);
+        return response()->json(['message' => 'success'], 201);
     }
 
     /**
