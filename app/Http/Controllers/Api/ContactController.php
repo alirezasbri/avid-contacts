@@ -101,15 +101,11 @@ class ContactController extends Controller
 
         if (!$contact = Contact::find($id))
             return response()->json(['message' => 'contact not found'], 404);
-        if (auth()->id() !== $contact->user_id)
-            return response()->json(['message' => 'unauthorized'], 401);
-
-        $type = $request->input('checkBox') == 'on' ? 'shared' : 'private';
 
         $contact->update([
             'name' => $request->input('name'),
             'family' => $request->input('family'),
-            'type' => $type
+            'type' => $request->input('checkBox') == 'on' ? 'shared' : 'private'
         ]);
 
         PhoneNumber::where('contact_id', $contact->id)->delete();
@@ -139,7 +135,7 @@ class ContactController extends Controller
                 $contact->image()->delete();
         }
 
-        return response()->json(['data' => 'success'], 200);
+        return response()->json(['message' => 'success'], 200);
     }
 
     /**
