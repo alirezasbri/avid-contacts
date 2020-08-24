@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/contacts', 'ContactApiController@index');
-Route::get('/contacts/{id}', 'ContactApiController@show');
-Route::post('/contacts', 'ContactApiController@store');
-Route::put('/contacts/{id}', 'ContactApiController@update');
-Route::delete('/contacts/{id}', 'ContactApiController@destroy');
+Route::get('/contacts', 'Api\ContactController@index');
+Route::get('/contacts/{id}', 'Api\ContactController@show');
+Route::post('/contacts', 'Api\ContactController@store');
+Route::put('/contacts/{id}', 'Api\ContactController@update');
+Route::delete('/contacts/{id}', 'Api\ContactController@destroy');
 
-Route::post('/register', 'UserApiController@register');
-Route::post('/login', 'UserApiController@login');
+Route::post('/register', 'Api\UserController@register');
+Route::post('/login', 'Api\UserController@login');
