@@ -6,6 +6,7 @@ use App\Contact;
 use App\Email;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
 use App\Http\Resources\Contact as ContactResource;
 use App\Image;
 use App\PhoneNumber;
@@ -65,7 +66,7 @@ class ContactController extends Controller
             $contact = Contact::find($contactId);
             $contact->image()->save($image);
         }
-        
+
         return response()->json(['message' => 'success'], 200);
     }
 
@@ -91,54 +92,34 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param UpdateContactRequest $request
      * @param int $id
      * @return void
-     * @throws ValidationException
      */
-    public function update($id)
+    public function update(UpdateContactRequest $request, $id)
     {
-        $this->validate(\request(), [
-            'name' => 'required|min:3|max:16',
-            'family' => 'required|min:3|max:24',
-            'emails' => 'required|array|min:1',
-            'emails.*' => 'email:rfc,dns',
-            'phones' => 'required|array|min:1',
-            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
-            'types' => 'required|array|min:1',
-            'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
 
         if (!$contact = Contact::find($id))
             return response()->json(['message' => 'contact not found'], 404);
         if (auth()->id() !== $contact->user_id)
             return response()->json(['message' => 'unauthorized'], 401);
 
-        $type = \request('checkBox') == 'on' ? 'shared' : 'private';
+        $type = $request->input('checkBox') == 'on' ? 'shared' : 'private';
 
         $contact->update([
-            'name' => request('name'),
-            'family' => request('family'),
+            'name' => $request->input('name'),
+            'family' => $request->input('family'),
             'type' => $type
         ]);
 
-        if (request()->has('phones') && request()->has('types')) {
-            PhoneNumber::where('contact_id', $contact->id)->delete();
-            $phones = array_values(request('phones'));
-            $types = array_values(request('types'));
-            $i = 0;
-            foreach ($phones as $pn) {
-                PhoneNumber::insertPhoneNumber($contact->id, $pn, $types[$i]);
-                $i++;
-            }
+        PhoneNumber::where('contact_id', $contact->id)->delete();
+        foreach ($request->input('phones') as $pn) {
+            PhoneNumber::insertPhoneNumber($contact->id, $pn['phone'], $pn['type']);
         }
 
-        if (request()->has('emails')) {
-            Email::where('contact_id', $contact->id)->delete();
-            $emails = array_values(request('emails'));
-            foreach ($emails as $email) {
-                Email::insertEmail($contact->id, $email);
-            }
+        Email::where('contact_id', $contact->id)->delete();
+        foreach ($request->input('emails') as $email) {
+            Email::insertEmail($contact->id, $email);
         }
 
         if ($files = \request()->file('photo_name')) {
