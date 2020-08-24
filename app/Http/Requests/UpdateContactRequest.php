@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Contact;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateContactRequest extends FormRequest
 {
@@ -13,7 +16,9 @@ class UpdateContactRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if (auth()->id() === Contact::find($this->route('id'))->user_id)
+            return true;
+        return false;
     }
 
     /**
@@ -33,5 +38,10 @@ class UpdateContactRequest extends FormRequest
             'types' => 'required|array|min:1',
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
+    }
+
+    public function failedAuthorization()
+    {
+        throw new HttpResponseException(response()->json(['message' => 'unauthorized'], 403));
     }
 }
