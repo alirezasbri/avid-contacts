@@ -30,7 +30,6 @@ class StoreContactRequest extends FormRequest
             'emails.*' => 'email:rfc,dns',
             'phones' => 'required|array|min:1',
             'phones.*.phone' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
-//            'types' => 'required|array|min:1',
             'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
