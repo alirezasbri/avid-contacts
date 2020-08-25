@@ -18,7 +18,6 @@ class ContactController extends Controller
         $this->middleware('auth');
     }
 
-
     function index()
     {
         $contacts = \App\Contact::where('user_id', Auth::id())->get();
@@ -64,22 +63,16 @@ class ContactController extends Controller
 
     function editFormContact($slug)
     {
-        $isExistSlug = Contact::isExistSlug($slug);
-
-        if (!$isExistSlug)
+        if (!$contact = Contact::where('slug', $slug)->first())
             abort(404);
-        $contact = Contact::getContactBySlug($slug);
 
         if (Auth::id() !== $contact->user_id)
             abort(403);
-        $phoneNumbers = PhoneNumber::getPhoneNumbers($contact->id);
-        $emails = Email::getContactEmails($contact->id);
-
 
         return view('contact.edit', ['contactSlug' => $contact->slug,
             'contact' => $contact,
-            'phoneNumbers' => $phoneNumbers,
-            'emails' => $emails]);
+            'phoneNumbers' => $contact->phoneNumbers,
+            'emails' => $contact->emails]);
 
     }
 
