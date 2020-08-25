@@ -24,4 +24,16 @@ if (!function_exists('updateImage')) {
             return $imageName;
         }
     }
+
+    if (!function_exists('handleImageInUpdateContact')) {
+        function handleImageInUpdateContact($files, $contact): void
+        {
+            if ($files) {
+                $contact->has('image') ? updateImage($files, $contact) : storeImage($files, $contact);
+            } else {
+                if ($contact->has('image'))
+                    $contact->image()->delete();
+            }
+        }
+    }
 }
