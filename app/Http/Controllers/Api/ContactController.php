@@ -108,12 +108,7 @@ class ContactController extends Controller
             Email::insertEmail($contact->id, $email);
         }
 
-        if ($files = $request->file('photo_name')) {
-            $contact->has('image') ? updateImage($files, $contact) : storeImage($files, $contact);
-        } else {
-            if ($contact->has('image'))
-                $contact->image()->delete();
-        }
+        handleImageInUpdateContact($request->file('photo_name'), $contact);
 
         return response()->json(['message' => 'success'], 200);
     }
