@@ -25,7 +25,7 @@ class ContactController extends Controller
         return view('contact.contacts', ['publicContacts' => $publicContacts, 'contacts' => $contacts, 'userId' => Auth::id()]);
     }
 
-    function showContact($slug)
+    function show($slug)
     {
         $isExistSlug = Contact::isExistSlug($slug);
 
@@ -61,7 +61,7 @@ class ContactController extends Controller
         return redirect()->route('contact.index');
     }
 
-    function editFormContact($slug)
+    function editForm($slug)
     {
         if (!$contact = Contact::where('slug', $slug)->first())
             abort(404);
@@ -104,7 +104,7 @@ class ContactController extends Controller
 
     }
 
-    public function deleteContact($id, $idContact)
+    public function deleteContact($idContact)
     {
         return Contact::destroy($idContact);
     }

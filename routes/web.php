@@ -33,11 +33,10 @@ Route::name('contact.index')->get('/contact', 'ContactController@index');
 Route::name('contact.add.form')->get('/contact/add', function () {
     return view('contact.add', ['userId' => Auth::id()]);
 });
-Route::name('contact.details')->get('/contact/{contactSlug}', 'ContactController@showContact');
-Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@updateContact');
-Route::name('contact.edit.form')->get('/contact/edit/{contactSlug}', 'ContactController@editFormContact');
-
-Route::name('contact.delete')->get('/user/{id}/contact/delete/{idContact}', 'ContactController@deleteContact');
+Route::name('contact.details')->get('/contact/{contactSlug}', 'ContactController@show');
+Route::name('contact.update')->get('/contact/update/{id}', 'ContactController@update');
+Route::name('contact.edit.form')->get('/contact/edit/{contactSlug}', 'ContactController@editForm');
+Route::name('contact.delete')->get('/contact/delete/{idContact}', 'ContactController@delete');
 
 Route::name('phoneNumber.delete')->get('/phonenumber/delete/{idPhoneNumber}', 'PhoneNumberController@deletePhoneNumber');
 Route::name('email.delete')->get('/email/delete/{idEmail}', 'EmailController@deleteEmail');
