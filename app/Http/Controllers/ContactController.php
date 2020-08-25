@@ -104,7 +104,7 @@ class ContactController extends Controller
 
     }
 
-    public function deleteContact($idContact)
+    public function delete($idContact)
     {
         return Contact::destroy($idContact);
     }
