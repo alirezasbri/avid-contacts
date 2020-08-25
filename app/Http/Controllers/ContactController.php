@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Contact;
 use App\Email;
 use App\Http\Requests\AddContactRequest;
+use App\Http\Requests\EditContactRequest;
 use App\Image;
 use App\PhoneNumber;
 use Illuminate\Support\Facades\Auth;
@@ -82,64 +83,26 @@ class ContactController extends Controller
 
     }
 
-    function editContact($id)
+    function update(EditContactRequest $request, $id)
     {
-
-        $phoneNumbers = PhoneNumber::getPhoneNumbers($id);
-        $emails = Email::getContactEmails($id);
-
-        $this->validate(request(), [
-            'name' => 'required|min:3|max:16',
-            'family' => 'required|min:3|max:24',
-            'emails' => 'required|array|min:1',
-            'emails.*' => 'email:rfc,dns',
-            'phones' => 'required|array|min:1',
-            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
-            'types' => 'required|array|min:1',
-            'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-
-//        if ($phoneNumbers->isEmpty()) {
-//            $this->validate(request(), [
-//                'phones' => 'required',
-//                'types' => 'required',
-//            ]);
-//        }
-//
-//        if ($emails->isEmpty()) {
-//            $this->validate(request(), [
-//                'emails' => 'required',
-//            ]);
-//        }
-
         $contact = Contact::getContactByID($id);
-
-        $type = \request('checkBox') == 'on' ? 'shared' : 'private';
 
         $contact->update([
             'name' => request('name'),
             'family' => request('family'),
-            'type' => $type
+            'type' => $request->input('checkBox') == 'on' ? 'shared' : 'private'
         ]);
 
-        if (request()->has('phones') && request()->has('types')) {
-            PhoneNumber::where('contact_id', $contact->id)->delete();
-            $phones = array_values(request('phones'));
-            $types = array_values(request('types'));
-            $i = 0;
-            foreach ($phones as $pn) {
-                PhoneNumber::insertPhoneNumber($contact->id, $pn, $types[$i]);
-                $i++;
-            }
+        PhoneNumber::where('contact_id', $contact->id)->delete();
+        $i = 0;
+        foreach ($request->input('phones') as $pn) {
+            PhoneNumber::insertPhoneNumber($contact->id, $pn, $request->input('types')[$i]);
+            $i++;
         }
 
-        if (request()->has('emails')) {
-            Email::where('contact_id', $contact->id)->delete();
-            $emails = array_values(request('emails'));
-            foreach ($emails as $email) {
-                Email::insertEmail($contact->id, $email);
-            }
+        Email::where('contact_id', $contact->id)->delete();
+        foreach ($request->input('emails') as $email) {
+            Email::insertEmail($contact->id, $email);
         }
 
         if ($files = \request()->file('photo_name')) {

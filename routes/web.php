@@ -43,8 +43,8 @@ Route::name('phoneNumber.delete')->get('/phonenumber/delete/{idPhoneNumber}', 'P
 Route::name('email.delete')->get('/email/delete/{idEmail}', 'EmailController@deleteEmail');
 
 
-Route::name('contact.add')->post('/contact/add', 'ContactController@addContact');
-Route::name('contact.edit')->post('/contact/edit/{id}', 'ContactController@editContact');
+Route::name('contact.add')->post('/contact/add', 'ContactController@add');
+Route::name('contact.edit')->post('/contact/edit/{id}', 'ContactController@update');
 Route::name('phoneNumber.add')->post('/contact/phonenumber/add/{id}', 'PhoneNumberController@addPhoneNumber');
 
 //Image Routes
