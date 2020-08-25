@@ -107,8 +107,13 @@ class ContactController extends Controller
         foreach ($request->input('emails') as $email) {
             Email::insertEmail($contact->id, $email);
         }
-        if ($file = $request->file('photo_name'))
-            updateImage($file, Contact::find($id));
+
+        if ($files = $request->file('photo_name')) {
+            $contact->has('image') ? updateImage($files, $contact) : storeImage($files, $contact);
+        } else {
+            if ($contact->has('image'))
+                $contact->image()->delete();
+        }
 
         return response()->json(['message' => 'success'], 200);
     }
