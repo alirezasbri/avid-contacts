@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use App\Email;
+use App\Http\Requests\AddContactRequest;
 use App\Image;
 use App\PhoneNumber;
 use Illuminate\Support\Facades\Auth;
@@ -38,49 +39,24 @@ class ContactController extends Controller
         return view('contact.show', ['phoneNumbers' => $phoneNumbers, 'emails' => $emails, 'contact' => $contact, 'editable' => $editable]);
     }
 
-    function addContact()
+    public function add(AddContactRequest $request)
     {
+        $contactId = Contact::insertContact(auth()->id(), $request->input('name'),
+            $request->input('family'),
+            $request->input('checkBox') == 'on' ? 'shared' : 'private');
 
-        $this->validate(request(), [
-            'name' => 'required|min:3|max:16',
-            'family' => 'required|min:3|max:24',
-            'emails' => 'required|array|min:1',
-            'emails.*' => 'email:rfc,dns',
-            'phones' => 'required|array|min:1',
-            'phones.*' => ['regex:/^(\+98|0098|98|0)[1-9]\d{9}$/'],
-            'types' => 'required|array|min:1',
-            'photo_name' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $type = \request('checkBox') == 'on' ? 'shared' : 'private';
-
-        $contactId = Contact::insertContact(Auth::id(), \request('name'), \request('family'), $type);
-
-        if (request()->has('phones') && request()->has('types')) {
-            $phones = array_values(request('phones'));
-            $types = array_values(request('types'));
-            $i = 0;
-            foreach ($phones as $pn) {
-                PhoneNumber::insertPhoneNumber($contactId, $pn, $types[$i]);
-                $i++;
-            }
-        }
-        if (request()->has('emails')) {
-            $emails = array_values(request('emails'));
-            foreach ($emails as $email) {
-                Email::insertEmail($contactId, $email);
-            }
+        $i = 0;
+        foreach ($request->input('phones') as $pn) {
+            PhoneNumber::insertPhoneNumber($contactId, $pn, $request->input('types')[$i]);
+            $i++;
         }
 
-        if ($files = \request()->file('photo_name')) {
-            $destinationPath = 'public/image/'; // upload path
-            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $profileImage);
-
-            $image = new Image(['image' => $profileImage]);
-            $contact = Contact::find($contactId);
-            $contact->image()->save($image);
+        foreach ($request->input('emails') as $email) {
+            Email::insertEmail($contactId, $email);
         }
+
+        if ($files = $request->file('photo_name'))
+            storeImage($files, Contact::find($contactId));
 
         return redirect()->route('contact.index');
     }
