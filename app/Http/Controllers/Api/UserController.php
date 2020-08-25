@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
     function login(Request $request)
     {
         $this->validate($request, [
@@ -45,4 +50,10 @@ class UserController extends Controller
         }
     }
 
+    public function logout()
+    {
+        auth()->user()->update(['api_token' => '']);
+        auth()->user()->save();
+        return response()->json(['message' => 'user logged out'], 200);
+    }
 }
