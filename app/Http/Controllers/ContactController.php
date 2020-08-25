@@ -85,7 +85,7 @@ class ContactController extends Controller
 
     function update(EditContactRequest $request, $id)
     {
-        $contact = Contact::getContactByID($id);
+        $contact = Contact::findOrFail($id);
 
         $contact->update([
             'name' => request('name'),
@@ -105,22 +105,7 @@ class ContactController extends Controller
             Email::insertEmail($contact->id, $email);
         }
 
-        if ($files = \request()->file('photo_name')) {
-            $destinationPath = 'public/image/'; // upload path
-            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-            $files->move($destinationPath, $profileImage);
-
-            $image = new Image(['image' => $profileImage]);
-            $contact = Contact::find($contact->id);
-            if ($contact->has('image')) {
-                $contact->image()->delete();
-                $contact->image()->save($image);
-            } else
-                $contact->image()->save($image);
-        } else {
-            if ($contact->has('image'))
-                $contact->image()->delete();
-        }
+        handleImageInUpdateContact($request->file('photo_name'), $contact);
 
         return redirect()->route('contact.details', $contact->slug);
 
