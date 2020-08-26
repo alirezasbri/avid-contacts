@@ -39,18 +39,7 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        $contactId = Contact::create([
-            'user_id' => auth()->id(),
-            'name' => $request->input('name'),
-            'family' => $request->input('family'),
-            'type' => $request->input('checkBox') == 'on' ? 'shared' : 'private'
-        ])->id;
-
-        storePhones($request->input('phones'), $contactId);
-        storeEmails($request->input('emails'), $contactId);
-
-        if ($file = $request->file('photo_name'))
-            storeImage($file, Contact::find($contactId));
+        createContactWithRelations($request);
 
         return response()->json(['message' => 'success'], 201);
     }
@@ -118,7 +107,7 @@ class ContactController extends Controller
 
             Contact::destroy($id);
             return response()->json(['message' => 'success'], 200);
-            
+
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'user not found'], 404);
         }
