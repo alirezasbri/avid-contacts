@@ -39,20 +39,15 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        $contactId = Contact::insertContact(
-            auth()->id(),
-            $request->input('name'),
-            $request->input('family'),
-            $request->input('checkBox') == 'on' ? 'shared' : 'private');
+        $contactId = Contact::create([
+            'user_id' => auth()->id(),
+            'name' => $request->input('name'),
+            'family' => $request->input('family'),
+            'type' => $request->input('checkBox') == 'on' ? 'shared' : 'private'
+        ])->id;
 
-
-        foreach ($request->input('phones') as $pn) {
-            PhoneNumber::insertPhoneNumber($contactId, $pn['phone'], $pn['type']);
-        }
-
-        foreach ($request->input('emails') as $email) {
-            Email::insertEmail($contactId, $email);
-        }
+        storePhones($request->input('phones'), $contactId);
+        storeEmails($request->input('emails'), $contactId);
 
         if ($file = $request->file('photo_name'))
             storeImage($file, Contact::find($contactId));
