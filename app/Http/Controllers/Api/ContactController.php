@@ -113,12 +113,12 @@ class ContactController extends Controller
     public function destroy($id)
     {
         try {
-            $contact = Contact::findOrFail($id);
-            if (!is_null($contact) && $contact->user_id === auth()->id()) {
-                Contact::destroy($id);
-                return response()->json(['message' => 'success'], 200);
-            } else
+            if (Contact::findOrFail($id)->user_id !== auth()->id())
                 return response()->json(['message' => 'unauthorized'], 401);
+
+            Contact::destroy($id);
+            return response()->json(['message' => 'success'], 200);
+            
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'user not found'], 404);
         }
