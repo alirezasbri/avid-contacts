@@ -11,6 +11,7 @@ You can read a Complete Tutorial To Cloning Repository in [there](https://docs.g
     - By default, the username is root and password is also root. (This is for Lamp)
 - Run `php artisan key:generate`
 - Run `php artisan migrate`
+- Run `php artisan db:seed`
 - Run `php artisan serve`
 
 ### Api Guide
