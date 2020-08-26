@@ -94,14 +94,10 @@ class ContactController extends Controller
         ]);
 
         PhoneNumber::where('contact_id', $contact->id)->delete();
-        foreach ($request->input('phones') as $pn) {
-            PhoneNumber::insertPhoneNumber($contact->id, $pn['phone'], $pn['type']);
-        }
-
         Email::where('contact_id', $contact->id)->delete();
-        foreach ($request->input('emails') as $email) {
-            Email::insertEmail($contact->id, $email);
-        }
+
+        storePhones($request->input('phones'), $contact->id);
+        storeEmails($request->input('emails'), $contact->id);
 
         handleImageInUpdateContact($request->file('photo_name'), $contact);
 
