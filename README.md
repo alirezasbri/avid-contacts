@@ -1,7 +1,7 @@
 ## Simple Contacts App
 
 ### Install Guide
-You can read a Complete Tutorial To Cloning Repository in [there](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) But in short:
+You can read a complete tutorial to cloning repository in [Here](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) But in short:
 - Change the current working directory to the location where you want the cloned directory.
 - Run `$ git clone https://github.com/alirezasbri/avid-contacts.git` on your cmd or terminal
 - Run `composer install`
