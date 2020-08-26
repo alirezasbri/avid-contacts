@@ -1,5 +1,6 @@
 <?php
 
+use App\Contact;
 use App\Email;
 use App\Image;
 use App\PhoneNumber;
@@ -62,5 +63,23 @@ if (!function_exists('storeEmails')) {
                 'email_address' => $email
             ]);
         }
+    }
+}
+
+if (!function_exists('createContactWithRelations')) {
+    function createContactWithRelations($request): void
+    {
+        $contactId = Contact::create([
+            'user_id' => auth()->id(),
+            'name' => $request->input('name'),
+            'family' => $request->input('family'),
+            'type' => $request->input('checkBox') == 'on' ? 'shared' : 'private'
+        ])->id;
+
+        storePhones($request->input('phones'), $contactId);
+        storeEmails($request->input('emails'), $contactId);
+
+        if ($file = $request->file('photo_name'))
+            storeImage($file, Contact::find($contactId));
     }
 }
