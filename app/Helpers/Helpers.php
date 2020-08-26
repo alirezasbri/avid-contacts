@@ -1,6 +1,8 @@
 <?php
 
+use App\Email;
 use App\Image;
+use App\PhoneNumber;
 
 if (!function_exists('storeImage')) {
     function storeImage($file, $contact): void
@@ -34,6 +36,31 @@ if (!function_exists('handleImageInUpdateContact')) {
         } else {
             if ($contact->has('image'))
                 $contact->image()->delete();
+        }
+    }
+}
+
+if (!function_exists('storePhones')) {
+    function storePhones($phones, $contactId): void
+    {
+        foreach ($phones as $pn) {
+            PhoneNumber::create([
+                'contact_id' => $contactId,
+                'phone_number' => $pn['phone'],
+                'type' => $pn['type']
+            ]);
+        }
+    }
+}
+
+if (!function_exists('storeEmails')) {
+    function storeEmails($emails, $contactId): void
+    {
+        foreach ($emails as $email) {
+            Email::create([
+                'contact_id' => $contactId,
+                'email_address' => $email
+            ]);
         }
     }
 }
