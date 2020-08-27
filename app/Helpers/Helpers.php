@@ -97,6 +97,7 @@ if (!function_exists('jsonResponseHandler')) {
     {
         $messages = [
             200 => 'success',
+            201 => 'created',
             401 => 'unauthorized',
             403 => 'unauthenticated',
             404 => 'not found'
