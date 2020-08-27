@@ -4,6 +4,7 @@ use App\Contact;
 use App\Email;
 use App\Image;
 use App\PhoneNumber;
+use Illuminate\Http\JsonResponse;
 
 if (!function_exists('storeImage')) {
     function storeImage($file, $contact): void
@@ -81,5 +82,26 @@ if (!function_exists('createContactWithRelations')) {
 
         if ($file = $request->file('photo_name'))
             storeImage($file, Contact::find($contactId));
+    }
+}
+
+if (!function_exists('jsonResponseWithMessage')) {
+    function jsonResponseWithMessage(string $message, int $statusCode): JsonResponse
+    {
+        return response()->json(['message' => $message], $statusCode);
+    }
+}
+
+if (!function_exists('jsonResponseHandler')) {
+    function jsonResponseHandler(int $statusCode)
+    {
+        $messages = [
+            200 => 'success',
+            401 => 'unauthorized',
+            403 => 'unauthenticated',
+            404 => 'not found'
+        ];
+
+        return jsonResponseWithMessage($messages[$statusCode], $statusCode);
     }
 }
