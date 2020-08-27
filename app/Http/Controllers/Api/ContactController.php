@@ -41,7 +41,7 @@ class ContactController extends Controller
     {
         createContactWithRelations($request);
 
-        return response()->json(['message' => 'success'], 201);
+        return jsonResponseHandler(201);
     }
 
     /**
@@ -57,9 +57,9 @@ class ContactController extends Controller
             if (!is_null($contact) && $contact->user_id === auth()->id())
                 return new ContactResource($contact);
             else
-                return response()->json(['message' => 'unauthorized'], 401);
+                return jsonResponseHandler(401);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'user not found'], 404);
+            return jsonResponseHandler(404);
         }
     }
 
@@ -74,7 +74,7 @@ class ContactController extends Controller
     {
 
         if (!$contact = Contact::find($id))
-            return response()->json(['message' => 'contact not found'], 404);
+            return jsonResponseHandler(404);
 
         $contact->update([
             'name' => $request->input('name'),
@@ -90,7 +90,7 @@ class ContactController extends Controller
 
         handleImageInUpdateContact($request->file('photo_name'), $contact);
 
-        return response()->json(['message' => 'success'], 200);
+        return jsonResponseHandler(200);
     }
 
     /**
@@ -103,13 +103,13 @@ class ContactController extends Controller
     {
         try {
             if (Contact::findOrFail($id)->user_id !== auth()->id())
-                return response()->json(['message' => 'unauthorized'], 401);
+                return jsonResponseHandler(401);
 
             Contact::destroy($id);
-            return response()->json(['message' => 'success'], 200);
+            return jsonResponseHandler(200);
 
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'user not found'], 404);
+            return jsonResponseHandler(404);
         }
     }
 
